@@ -34,16 +34,16 @@ const AddMovies = () => {
   const [releasingYear, setreleasingYear] = useState();
   const [movieTitle, setmovieTitle] = useState();
   const [type, settype] = useState([]);
+  const [genreInput, setgenreInput] = useState('');
+  const [isKeyReleasedGenre, setIsKeyReleasedGenre] = useState(false);
   const [maturityRating, setmaturityRating] = useState();
   const [input, setInput] = useState('');
-  const [genreInput, setgenreInput] = useState('');
+  const [cast, setcast] = useState([]);
+  const [isKeyReleased, setIsKeyReleased] = useState(false);
   const [writerInput, setwriterInput] = useState('');
   const [directorInput, setDirectorInput] = useState('');
-  const [cast, setcast] = useState([]);
   const [writer, setwriter] = useState([]);
   const [director, setdirector] = useState([]);
-  const [isKeyReleased, setIsKeyReleased] = useState(false);
-  const [isKeyReleasedGenre, setIsKeyReleasedGenre] = useState(false);
   const [isKeyReleasedWriter, setIsKeyReleasedWriter] = useState(false);
   const [isKeyReleasedDirector, setIsKeyReleasedDirector] = useState(false);
   // cast

@@ -8,90 +8,77 @@ import {
   Tag,
   Select,
 } from '@chakra-ui/react';
-
+import { ImCross } from 'react-icons/im';
 import React, { useState } from 'react';
 export const AddSeriesContent = () => {
-  const [grossRating, setGrossRating] = useState();
-  const [description, setdescription] = useState();
-  const [releasingYear, setreleasingYear] = useState();
   const [seriesName, setseriesName] = useState();
-  const [type, settype] = useState();
+  const [description, setdescription] = useState();
+  const [thumbnail, setThumbnail] = useState();
+  const [trailer, setTrailer] = useState();
+  const [genre, setGenre] = useState([]);
+  const [noOfSeasons, setNoOfSeasons] = useState();
+  const [grossRating, setGrossRating] = useState();
   const [maturityRating, setmaturityRating] = useState();
-  const [input, setInput] = useState('');
   const [cast, setcast] = useState([]);
-  const [creator, setcreator] = useState();
-  const [isKeyReleased, setIsKeyReleased] = useState(false);
 
-  const onChange = e => {
-    const { value } = e.target;
-    setInput(value);
-  };
-  const onKeyDown = e => {
-    const { key } = e;
-    const trimmedInput = input.trim();
+  // cast
+  const addCast = e => {
+    if (e.key === 'Enter') {
+      if (e.target.value.length > 0) {
+        setcast([...cast, e.target.value]);
 
-    if (
-      (key === ',', key === 'Enter') &&
-      trimmedInput.length &&
-      !cast.includes(trimmedInput)
-    ) {
-      e.preventDefault();
-      setcast(prevState => [...prevState, trimmedInput]);
-      setInput('');
+        e.target.value = '';
+      }
     }
+  };
+  const removeCast = removedCast => {
+    const newCast = cast.filter(tag => tag !== removedCast);
+    setcast(newCast);
+  };
+  // genre
+  const addGenre = e => {
+    if (e.key === 'Enter') {
+      if (e.target.value.length > 0) {
+        setGenre([...genre, e.target.value]);
 
-    if (key === 'Backspace' && !input.length && cast.length && isKeyReleased) {
-      const castCopy = [...cast];
-      const poppedTag = castCopy.pop();
-      e.preventDefault();
-      setcast(castCopy);
-      setInput(poppedTag);
+        e.target.value = '';
+      }
     }
-
-    setIsKeyReleased(false);
   };
-
-  const onKeyUp = () => {
-    setIsKeyReleased(true);
+  const removeGenre = removedGenre => {
+    const newGenre = genre.filter(tag => tag !== removedGenre);
+    setGenre(newGenre);
   };
-  const deleteTag = index => {
-    setcast(prevState => prevState.filter((tag, i) => i !== index));
-  };
-
+  // supported image formats
+  const supportedThumbailFormats = ['image/png', 'image/jpeg'];
+  // supported image formats
+  const supportedTrailerFormats = ['video/mp4'];
+  // submithadler
   const submitHandler = () => {
-    if (
-      !description ||
-      !seriesName ||
-      !type ||
-      !releasingYear ||
-      !grossRating ||
-      !maturityRating ||
-      !cast ||
-      !creator
-    ) {
-      alert('Please fill all fields!');
-      return;
-    } else {
-      const payload = {
-        description: description,
-        seriesName: seriesName,
-        type: type,
-        releasingYear: releasingYear,
-        grossRating: grossRating,
-        maturityRating: maturityRating,
-        cast: cast,
-        creator: creator,
-      };
+    const payload = new FormData();
 
-      console.log(payload);
-      setdescription('');
-      setseriesName('');
-      settype('');
-      setreleasingYear('');
-      setGrossRating('');
-      setmaturityRating('');
-      setcreator('');
-    }
+    payload.append('user_id', '62fdf35838e99ecbeee2670b');
+    payload.append('seriesName', seriesName);
+    payload.append('thumbnail', thumbnail);
+    payload.append('trailer', trailer);
+    payload.append('description', description);
+    payload.append('genre', genre);
+    payload.append('totalNumberOfSeasons', noOfSeasons);
+    payload.append('grossRatings', grossRating);
+    payload.append('cast', cast);
+    payload.append('maturityRating', maturityRating);
+    payload.forEach((value, key) => {
+      console.log(key, value);
+    });
+    setseriesName('');
+    setThumbnail('');
+    setTrailer('');
+    setdescription('');
+    setGenre('');
+    setNoOfSeasons('');
+    setGrossRating('');
+    setcast('');
+    setmaturityRating('');
   };
   return (
     <Stack py="6" px={{ base: '4', md: '18', lg: '24' }}>
@@ -134,39 +121,7 @@ export const AddSeriesContent = () => {
             isRequired
           />
         </Stack>
-        {/* type and releasing year */}
-        <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-          <Select
-            isRequired
-            fontSize={{ base: 'md', md: 'lg' }}
-            w={{ base: '100%', md: '50%' }}
-            value={type}
-            onChange={e => settype(e.target.value)}
-            _hover={{ cursor: 'pointer' }}
-            borderColor="black"
-            _focusVisible={{}}
-            placeholder="Select Genre"
-            size="lg"
-          >
-            <option value="action">action</option>
-          </Select>
-          <Select
-            isRequired
-            fontSize={{ base: 'md', md: 'lg' }}
-            w={{ base: '100%', md: '50%' }}
-            _hover={{ cursor: 'pointer' }}
-            borderColor="black"
-            value={releasingYear}
-            onChange={e => setreleasingYear(e.target.value)}
-            _focusVisible={{}}
-            placeholder="Select Releasing Year"
-            size="lg"
-          >
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-          </Select>
-        </Stack>
+
         {/* thumbnail and trailer  */}
         <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
           <Input
@@ -174,6 +129,8 @@ export const AddSeriesContent = () => {
             w={{ base: '100%', md: '50%' }}
             type={'file'}
             size={'lg'}
+            onChange={e => setThumbnail(e.target.files[0])}
+            accept={supportedThumbailFormats}
             borderColor="black"
             _focusVisible={{}}
             _hover={{ cursor: 'pointer' }}
@@ -186,6 +143,8 @@ export const AddSeriesContent = () => {
             _hover={{ cursor: 'pointer' }}
             w={{ base: '100%', md: '50%' }}
             type={'file'}
+            onChange={e => setTrailer(e.target.files[0])}
+            accept={supportedTrailerFormats}
             size={'lg'}
             isRequired
           />
@@ -204,16 +163,12 @@ export const AddSeriesContent = () => {
             placeholder="Choose Gross Rating"
             size="lg"
           >
-            <option value="0">0</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="40">40</option>
-            <option value="50">50</option>
-            <option value="60">60</option>
-            <option value="70">70</option>
-            <option value="80">80</option>
-            <option value="90">90</option>
-            <option value="100">100</option>
+            <option value="0star">0star</option>
+            <option value="1star">1star</option>
+            <option value="2stars">2stars</option>
+            <option value="3stars">3stars</option>
+            <option value="4stars">4stars</option>
+            <option value="5stars">5stars</option>
           </Select>
           <Select
             isRequired
@@ -233,58 +188,18 @@ export const AddSeriesContent = () => {
             <option value="18+">18+</option>
           </Select>
         </Stack>
-        {/* total time and isCollection */}
-        <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-          <Input
-            w={{ base: '100%', md: '50%' }}
-            size={'lg'}
-            _hover={{}}
-            type="text"
-            _focusVisible={{}}
-            borderColor="black"
-            placeholder="total Time(e.g 120m)"
-            isRequired
-          />
-          <Checkbox
-            w={{ base: '100%', md: '50%' }}
-            size="lg"
-            colorScheme="green"
-          >
-            is Collection?
-          </Checkbox>
-        </Stack>
-        {/* writer and creators */}
+        {/* no of seasons and cast */}
         <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
           <Input
             w={{ base: '100%', md: '50%' }}
             size={'lg'}
             _hover={{}}
             _focusVisible={{}}
+            type="number"
             borderColor="black"
-            placeholder="writer name"
-            isRequired
-          />
-          <Input
-            w={{ base: '100%', md: '50%' }}
-            size={'lg'}
-            _hover={{}}
-            value={creator}
-            onChange={e => setcreator(e.target.value)}
-            _focusVisible={{}}
-            borderColor="black"
-            placeholder="creator name"
-            isRequired
-          />
-        </Stack>
-        {/* collection chapter and cast */}
-        <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-          <Input
-            w={{ base: '100%', md: '50%' }}
-            size={'lg'}
-            _hover={{}}
-            _focusVisible={{}}
-            borderColor="black"
-            placeholder="collection chapter"
+            value={noOfSeasons}
+            onChange={e => setNoOfSeasons(e.target.value)}
+            placeholder="Total Seasons"
             isRequired
           />
           <Input
@@ -294,41 +209,100 @@ export const AddSeriesContent = () => {
             _focusVisible={{}}
             borderColor="black"
             placeholder="cast"
-            onKeyDown={onKeyDown}
-            onKeyUp={onKeyUp}
-            onChange={onChange}
-            value={input}
+            onKeyDown={addCast}
             isRequired
           />
         </Stack>
         {/* cast names preview */}
-        <SimpleGrid
-          // overflowX={'auto'}
-          //   maxW={{ base: '100%', md: '50%' }}
-          w={{ base: '100%', md: '50%' }}
-          alignSelf={{ base: 'initial', md: 'end' }}
-          direction={'row'}
-          minChildWidth="120px"
-          spacing="10px"
-        >
-          {cast?.map((tag, index) => (
-            <Tag
-              minH={'60px'}
-              border="1px solid orange"
-              borderRadius="lg"
-              backgroundColor="orange"
-              _hover={{
-                cursor: 'pointer',
-              }}
-              colorScheme={'purple'}
-              size={'lg'}
-              onClick={() => deleteTag(index)}
-            >
-              {tag}
-            </Tag>
-          ))}
-        </SimpleGrid>
-
+        {cast.length !== 0 ? (
+          <SimpleGrid
+            w={{ base: '100%', md: '50%' }}
+            minChildWidth="120px"
+            spacingX="10px"
+            spacingY={'15px'}
+            alignSelf="end"
+          >
+            {cast?.map((cast, index) => (
+              <Stack w={'fit-content'} h="fitcontent" pos={'relative'}>
+                {' '}
+                <Tag
+                  key={index}
+                  h={'40px'}
+                  border="1px solid black"
+                  borderRadius="md"
+                  colorScheme={'blue'}
+                >
+                  {cast} {''}
+                </Tag>
+                <Stack
+                  onClick={() => removeCast(cast)}
+                  _hover={{
+                    cursor: 'pointer',
+                    transform: 'scale(1.3)',
+                  }}
+                  transition="transform .2s"
+                  pos={'absolute'}
+                  top="-15px"
+                  right="-5px"
+                >
+                  <ImCross fontSize={'0.8rem'} color="red" />
+                </Stack>
+              </Stack>
+            ))}
+          </SimpleGrid>
+        ) : null}
+        {/* genre*/}
+        <Stack mr={'7 !important'}>
+          <Input
+            w={{ base: '100%', md: '50%' }}
+            size={'lg'}
+            _hover={{}}
+            _focusVisible={{}}
+            borderColor="black"
+            placeholder="genre"
+            onKeyDown={addGenre}
+            isRequired
+          />
+        </Stack>
+        {/* genre preview */}
+        {genre.length > 0 ? (
+          <SimpleGrid
+            w={{ base: '100%', md: '50%' }}
+            direction={'row'}
+            minChildWidth="120px"
+            spacingX="10px"
+            spacingY={'15px'}
+          >
+            {genre?.map((genre, index) => (
+              <Stack w={'fit-content'} h="fitcontent" pos={'relative'}>
+                {' '}
+                <Tag
+                  key={index}
+                  h={'40px'}
+                  border="1px solid orange"
+                  borderRadius="md"
+                  colorScheme={'purple'}
+                >
+                  {genre} {''}
+                </Tag>
+                <Stack
+                  onClick={() => removeGenre(genre)}
+                  _hover={{
+                    cursor: 'pointer',
+                    transform: 'scale(1.3)',
+                  }}
+                  transition="transform .2s"
+                  pos={'absolute'}
+                  top="-15px"
+                  right="-5px"
+                >
+                  <ImCross fontSize={'0.8rem'} color="red" />
+                </Stack>
+              </Stack>
+            ))}
+          </SimpleGrid>
+        ) : null}
+        {/* submit button */}
         <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
           <Button
             borderRadius={'lg'}
