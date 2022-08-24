@@ -1,0 +1,78 @@
+body {
+  background-color: #F7FAFC !important;
+}
+::-webkit-scrollbar {
+  height: 3px;
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: teal;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(209, 52, 201);
+}
+.link {
+  font-weight: 500;
+  color: white;
+}
+.link:hover{
+  background-color: #808080;
+  border-radius: 5px;
+}
+/* Specific styles for active links */
+.link-active {
+  font-weight: 700;
+  color: white !important;
+  background: #BC0B0B;
+  
+  border-radius: 5px;
+}
+
+/* upload title*/
+.upload-title {
+  color: transparent;
+}
+.upload-title::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.upload-title::before {
+  content: 'Upload thumbnail';
+  color: gray;
+  display: inline-block;
+  padding: 12px 0 0 0px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+/* upload trailer */
+.upload-trailer {
+  color: transparent;
+}
+.upload-trailer::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.upload-trailer::before {
+  content: 'Upload trailer';
+  color: gray;
+  display: inline-block;
+  padding: 12px 0 0 0px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.css-pkpkxn{
+  padding: 0 !important;
+}
+
