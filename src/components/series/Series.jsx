@@ -19,6 +19,8 @@ import UpdateThumbnailModal from './UpdateThumbnailModal';
 import UpdateTrailerModal from './UpdateTrailerModal';
 import { getAllSeries } from '../../redux/actions/Series/Series';
 import { useDispatch, useSelector } from 'react-redux/es/exports';
+
+
 const Series = () => {
   const dispatch = useDispatch();
   const { allSeries } = useSelector(state => state.Series);
