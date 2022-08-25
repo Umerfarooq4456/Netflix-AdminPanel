@@ -14,11 +14,8 @@ import {
 } from '@chakra-ui/react';
 
 import { useNavigate } from 'react-router-dom';
-import AddSeriesModal from './AddSeriesModal';
-import EditInfoModal from './EditInfoModal';
-import UpdateThumbnailModal from './UpdateThumbnailModal';
-import UpdateTrailerModal from './UpdateTrailerModal';
-const Series = () => {
+import AddSeasonModal from './AddSeasonModal';
+const Seasons = () => {
   const nav = useNavigate();
 
   return (
@@ -29,9 +26,26 @@ const Series = () => {
           textAlign={'center'}
           fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}
         >
-          Series Details
+          Season Details
         </Heading>
-        <AddSeriesModal />
+        <Select
+            isRequired
+            fontSize={{ base: 'md', md: 'lg' }}
+            w={'fit-content'}
+            _hover={{ cursor: 'pointer' }}
+            borderColor="black"
+            // value={releasingYear}
+            // onChange={e => setreleasingYear(e.target.value)}
+            _focusVisible={{}}
+            placeholder="Select Season"
+            size="lg"
+            bg='transparent'
+          >
+            <option className='season-options' value="Season1">Season1</option>
+            <option className='season-options' value="Season2">Season2</option>
+            <option className='season-options' value="Season3">Season3</option>
+          </Select>
+        <AddSeasonModal />
       </Stack>
 
       {/* users detail table */}
@@ -63,19 +77,19 @@ const Series = () => {
             <Tr>
               <Td color={'black'} fontSize={'sm'} fontWeight='600'>Money Hiest</Td>
               <Td>
-                <EditInfoModal/>
+                {/* <EditInfoModal/> */}
               </Td>
               <Td>
-              <UpdateThumbnailModal/>
+              {/* <UpdateThumbnailModal/> */}
               </Td>
               <Td>
-              <UpdateTrailerModal/>
+              {/* <UpdateTrailerModal/> */}
               </Td>
               <Td>
               <Button size={'sm'} colorScheme='red'>Deactivate</Button>
               </Td>
               <Td>
-              <Button size={'sm'} colorScheme='linkedin' onClick={()=>nav('/manageseasons')}>Manage Seasons</Button>
+              <Button size={'sm'} colorScheme='linkedin'>Manage Seasons</Button>
               </Td>
             </Tr>
           </Tbody>
@@ -85,4 +99,4 @@ const Series = () => {
   );
 };
 
-export default Series;
+export default Seasons;

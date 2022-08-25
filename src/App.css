@@ -76,3 +76,10 @@ body {
   padding: 0 !important;
 }
 
+/* season select */
+
+
+.season-options:hover {
+background: red !important;
+color: white;
+}
