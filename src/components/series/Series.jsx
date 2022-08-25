@@ -22,7 +22,7 @@ const Series = () => {
   const nav = useNavigate();
 
   return (
-    <Stack maxW={'100%'} w={'100%'} px={'8'} py="6">
+    <Stack maxW={'100%'} w={'100%'} px={'8'} py="6" overflow={'auto'}>
       <Stack direction={'row'} w={'100%'} justifyContent="space-between">
         <Heading
           pb={'6'}
@@ -81,6 +81,70 @@ const Series = () => {
           </Tbody>
         </Table>
       </TableContainer>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
+      <Button>Test</Button>
     </Stack>
   );
 };

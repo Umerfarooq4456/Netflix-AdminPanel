@@ -8,10 +8,11 @@ const PrivateRoutes = ({ children }) => {
     <Stack pos={'relative'} w={'100%'}>
       <Stack w={'100%'}>
         <Header />
-        <Stack mt='0 !important' w={'full'} direction={'row'}>
+        <Stack mt="0 !important" w={'full'} direction={'row'} >
           <Sidebar />
-          <Stack mt='60px !important' w={'100%'} ml={'20% !important'}>
-          {children}
+
+          <Stack mt="60px !important" w={'80%'}>
+            {children}
           </Stack>
         </Stack>
       </Stack>

@@ -15,11 +15,13 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import AddSeasonModal from './AddSeasonModal';
+import { MdDelete } from 'react-icons/md';
+import { BiPlus } from 'react-icons/bi';
 const Seasons = () => {
   const nav = useNavigate();
 
   return (
-    <Stack maxW={'100%'} w={'100%'} px={'8'} py="6">
+    <Stack spacing={'4'} maxW={'100%'} w={'100%'} px={'8'} py="6">
       <Stack direction={'row'} w={'100%'} justifyContent="space-between">
         <Heading
           pb={'6'}
@@ -48,13 +50,13 @@ const Seasons = () => {
         <AddSeasonModal />
       </Stack>
 
-      {/* users detail table */}
+      {/* episode detail table */}
       <TableContainer overflowX={'auto'} w={'100%'}>
         <Table w={'100%'} variant="striped" colorScheme="green">
           <Thead>
             <Tr>
               <Th color={'black'} fontSize="sm">
-                Name
+                Title
               </Th>
               <Th color={'black'} fontSize="sm">
                 Update Info
@@ -63,10 +65,10 @@ const Seasons = () => {
                 Update Thumbnail
               </Th>
               <Th color={'black'} fontSize="sm">
-                Update Trailer
+                Update Video
               </Th>
               <Th color={'black'} fontSize="sm">
-                Deactivate Series
+                Delete Episode
               </Th>
               <Th color={'black'} fontSize="sm">
                 Manage Seasons
@@ -75,7 +77,7 @@ const Seasons = () => {
           </Thead>
           <Tbody>
             <Tr>
-              <Td color={'black'} fontSize={'sm'} fontWeight='600'>Money Hiest</Td>
+              <Td color={'black'} fontSize={'sm'} fontWeight='600'>Dustin</Td>
               <Td>
                 {/* <EditInfoModal/> */}
               </Td>
@@ -86,7 +88,7 @@ const Seasons = () => {
               {/* <UpdateTrailerModal/> */}
               </Td>
               <Td>
-              <Button size={'sm'} colorScheme='red'>Deactivate</Button>
+              <Button size={'sm'} colorScheme='red'>Delete</Button>
               </Td>
               <Td>
               <Button size={'sm'} colorScheme='linkedin'>Manage Seasons</Button>
@@ -95,6 +97,7 @@ const Seasons = () => {
           </Tbody>
         </Table>
       </TableContainer>
+      <Button rightIcon={<BiPlus fontSize='1.7rem'/>} alignSelf={'center'} w='fit-content' size={'md'} colorScheme='red'>Add Episode</Button>
     </Stack>
   );
 };

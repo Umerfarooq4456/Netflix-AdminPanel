@@ -20,7 +20,6 @@ const Sidebar = () => {
   const nav = useNavigate();
   return (
     <Stack
-      pos={'fixed'}
       overflow={'hidden'}
       bg={'#1D1D1D'}
       h="calc(100vh-60px)"
