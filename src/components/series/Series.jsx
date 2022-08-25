@@ -68,34 +68,37 @@ const Series = () => {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td color={'black'} fontSize={'sm'} fontWeight="600">
-                Money Hiest
-              </Td>
-              <Td>
-                <EditInfoModal />
-              </Td>
-              <Td>
-                <UpdateThumbnailModal />
-              </Td>
-              <Td>
-                <UpdateTrailerModal />
-              </Td>
-              <Td>
-                <Button size={'sm'} colorScheme="red">
-                  Deactivate
-                </Button>
-              </Td>
-              <Td>
-                <Button
-                  size={'sm'}
-                  colorScheme="linkedin"
-                  onClick={() => nav('/manageseasons')}
-                >
-                  Manage Seasons
-                </Button>
-              </Td>
-            </Tr>
+            {allSeries?.series?.map((data)=>
+             <Tr>
+             <Td color={'black'} fontSize={'sm'} fontWeight="600">
+               {data?.seriesName}
+             </Td>
+             <Td>
+               <EditInfoModal />
+             </Td>
+             <Td>
+               <UpdateThumbnailModal />
+             </Td>
+             <Td>
+               <UpdateTrailerModal />
+             </Td>
+             <Td>
+               <Button size={'sm'} colorScheme="red">
+                 Deactivate
+               </Button>
+             </Td>
+             <Td>
+               <Button
+                 size={'sm'}
+                 colorScheme="linkedin"
+                 onClick={() => nav('/manageseasons')}
+               >
+                 Manage Seasons
+               </Button>
+             </Td>
+           </Tr>
+            )}
+           
           </Tbody>
         </Table>
       </TableContainer>
