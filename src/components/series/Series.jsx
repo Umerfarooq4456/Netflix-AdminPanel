@@ -12,13 +12,21 @@ import {
   Heading,
   Select,
 } from '@chakra-ui/react';
-
 import { useNavigate } from 'react-router-dom';
 import AddSeriesModal from './AddSeriesModal';
 import EditInfoModal from './EditInfoModal';
 import UpdateThumbnailModal from './UpdateThumbnailModal';
 import UpdateTrailerModal from './UpdateTrailerModal';
+import { getAllSeries } from '../../redux/actions/Series/Series';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
 const Series = () => {
+  const dispatch = useDispatch();
+  const { allSeries } = useSelector(state => state.Series);
+  console.log(allSeries);
+  useEffect(() => {
+    dispatch(getAllSeries());
+  }, []);
+
   const nav = useNavigate();
 
   return (
@@ -61,90 +69,37 @@ const Series = () => {
           </Thead>
           <Tbody>
             <Tr>
-              <Td color={'black'} fontSize={'sm'} fontWeight='600'>Money Hiest</Td>
-              <Td>
-                <EditInfoModal/>
+              <Td color={'black'} fontSize={'sm'} fontWeight="600">
+                Money Hiest
               </Td>
               <Td>
-              <UpdateThumbnailModal/>
+                <EditInfoModal />
               </Td>
               <Td>
-              <UpdateTrailerModal/>
+                <UpdateThumbnailModal />
               </Td>
               <Td>
-              <Button size={'sm'} colorScheme='red'>Deactivate</Button>
+                <UpdateTrailerModal />
               </Td>
               <Td>
-              <Button size={'sm'} colorScheme='linkedin' onClick={()=>nav('/manageseasons')}>Manage Seasons</Button>
+                <Button size={'sm'} colorScheme="red">
+                  Deactivate
+                </Button>
+              </Td>
+              <Td>
+                <Button
+                  size={'sm'}
+                  colorScheme="linkedin"
+                  onClick={() => nav('/manageseasons')}
+                >
+                  Manage Seasons
+                </Button>
               </Td>
             </Tr>
           </Tbody>
         </Table>
       </TableContainer>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
-      <Button>Test</Button>
+     
     </Stack>
   );
 };

@@ -13,9 +13,9 @@ import Avatar from '../../screens/Avatar';
 const MainRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route
-        path="/dashboard"
+        path="/"
         element={
           <PrivateRoutes>
             {' '}
@@ -68,7 +68,7 @@ const MainRoutes = () => {
           </PrivateRoutes>
         }
       />
-       <Route
+      <Route
         path="/manageseasons"
         element={
           <PrivateRoutes>

@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Stack,
   Flex,
@@ -15,7 +16,10 @@ import {
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
+import { authLogin } from '../../redux/actions/Auth/Auth';
+
 const Login = () => {
+  const dispatch = useDispatch();
   const nav = useNavigate();
   const email = useRef();
   const password = useRef();
@@ -34,16 +38,17 @@ const Login = () => {
 
       password: password.current.value,
     };
+    dispatch(authLogin(payload, nav));
     console.log(payload);
-  email.current.value = "";
-  password.current.value = "";
+    email.current.value = '';
+    password.current.value = '';
   };
   return (
     <Stack
       w="100%"
       maxH={'100vh'}
       h={'100vh'}
-      bg='#111'
+      bg="#111"
       px={{ base: '4', md: '6', lg: '20' }}
       py={'6'}
     >
@@ -65,7 +70,7 @@ const Login = () => {
             </FormLabel>
             <Input
               _focusVisible={{}}
-              color='white'
+              color="white"
               fontSize="md"
               type="text"
               placeholder="Enter Your email address"
@@ -81,7 +86,7 @@ const Login = () => {
             </FormLabel>
             <Input
               _focusVisible={{}}
-              color='white'
+              color="white"
               fontWeight="600"
               fontSize="md"
               type="password"
@@ -105,12 +110,12 @@ const Login = () => {
           </FormControl>
         </Stack>
         <Stack spacing={'6'} w={'100%'}>
-          
           {/* signIn button */}
           <Button
-          onClick={(e)=>{submitHandler(e)
-          nav('/dashboard')
-          }}
+            onClick={e => {
+              submitHandler(e);
+              nav('/dashboard');
+            }}
             alignSelf={'center'}
             fontSize="md"
             type="submit"

@@ -10,7 +10,13 @@ import {
 } from '@chakra-ui/react';
 import { ImCross } from 'react-icons/im';
 import React, { useState } from 'react';
+import { createSeries } from '../../redux/actions/Series/Series';
+import { useSelector, useDispatch } from 'react-redux';
+
 export const AddSeriesContent = () => {
+  const dispatch = useDispatch();
+  const { loginData } = useSelector(state => state.Auth);
+  const userId = loginData.data.user._id;
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
   const [thumbnail, setThumbnail] = useState();
@@ -57,7 +63,7 @@ export const AddSeriesContent = () => {
   const submitHandler = () => {
     const payload = new FormData();
 
-    payload.append('user_id', '62fdf35838e99ecbeee2670b');
+    payload.append('user_id', userId);
     payload.append('seriesName', seriesName);
     payload.append('thumbnail', thumbnail);
     payload.append('trailer', trailer);
@@ -70,6 +76,9 @@ export const AddSeriesContent = () => {
     payload.forEach((value, key) => {
       console.log(key, value);
     });
+
+    dispatch(createSeries(payload));
+
     setseriesName('');
     setThumbnail('');
     setTrailer('');
@@ -80,6 +89,7 @@ export const AddSeriesContent = () => {
     setcast('');
     setmaturityRating('');
   };
+
   return (
     <Stack py="6" px={{ base: '4', md: '18', lg: '24' }}>
       <Heading
