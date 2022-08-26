@@ -1,13 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from '../../components/auth/Login';
-import Dashboard from '../../components/dashboard/Dashboard';
-import AddMovies from '../../components/movies/AddMovies';
-import MoviesDetails from '../../components/movies/MoviesDetails';
-import AddAvatar from '../../components/profile pics/AddAvatar';
-import Series from '../../components/series/Series';
-import UserDetails from '../../components/users/UserDetails';
+import Dashboard from '../../screens/Home';
+import Seasons from '../../screens/Seasons';
+import Series from '../../screens/Series';
 import PrivateRoutes from './PrivateRoutes';
+import Users from '../../screens/Users';
+import AddMovie from '../../screens/movies/AddMovie';
+import Movies from '../../screens/movies/Movies';
+import Avatar from '../../screens/Avatar';
 
 const MainRoutes = () => {
   return (
@@ -27,7 +28,7 @@ const MainRoutes = () => {
         element={
           <PrivateRoutes>
             {' '}
-            <UserDetails />{' '}
+            <Users />{' '}
           </PrivateRoutes>
         }
       />
@@ -36,7 +37,7 @@ const MainRoutes = () => {
         element={
           <PrivateRoutes>
             {' '}
-            <AddMovies />{' '}
+            <AddMovie />{' '}
           </PrivateRoutes>
         }
       />
@@ -45,7 +46,7 @@ const MainRoutes = () => {
         element={
           <PrivateRoutes>
             {' '}
-            <MoviesDetails />{' '}
+            <Movies />{' '}
           </PrivateRoutes>
         }
       />
@@ -63,7 +64,16 @@ const MainRoutes = () => {
         element={
           <PrivateRoutes>
             {' '}
-            <AddAvatar />{' '}
+            <Avatar />{' '}
+          </PrivateRoutes>
+        }
+      />
+       <Route
+        path="/manageseasons"
+        element={
+          <PrivateRoutes>
+            {' '}
+            <Seasons />{' '}
           </PrivateRoutes>
         }
       />
