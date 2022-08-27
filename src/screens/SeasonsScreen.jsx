@@ -1,6 +1,6 @@
 import React from 'react'
 import Seasons from '../components/seasons/Seasons'
-const Seasons = () => {
+const SeasonsScreen = () => {
   return (
     <>
     <Seasons/>
@@ -8,4 +8,4 @@ const Seasons = () => {
   )
 }
 
-export default Seasons
+export default SeasonsScreen
