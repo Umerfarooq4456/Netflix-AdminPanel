@@ -17,7 +17,7 @@ export const Auth = (state = initialState, { type, payload }) => {
     case LOGIN_SUCCESS:
       return { ...state, loading: false, loginData: payload };
     case LOGIN_FAILED:
-      return { ...state, error: payload };
+      return { ...state,loading:false, error: payload };
 
     default:
       return state;

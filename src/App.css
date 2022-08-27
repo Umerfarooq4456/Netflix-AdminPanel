@@ -2,7 +2,7 @@ body {
   background-color: #F7FAFC !important;
 }
 ::-webkit-scrollbar {
-  height: 3px;
+  height: 4px;
   width: 5px;
 }
 
@@ -13,12 +13,12 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: teal;
+  background: #9A0C13;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(209, 52, 201);
+  background: rgb(131, 3, 3);
 }
 .link {
   font-weight: 500;
@@ -37,18 +37,18 @@ body {
   border-radius: 5px;
 }
 
-/* upload title*/
+/* upload thumbnail*/
 .upload-title {
   color: transparent;
 }
-.upload-title::-webkit-file-upload-button {
+/* .upload-title::-webkit-file-upload-button {
   visibility: hidden;
-}
-.upload-title::before {
+} */
+.upload-title::after {
   content: 'Upload thumbnail';
   color: gray;
   display: inline-block;
-  padding: 12px 0 0 0px;
+  padding: 10px 0 0 0px;
   outline: none;
   white-space: nowrap;
   cursor: pointer;
@@ -58,14 +58,14 @@ body {
 .upload-trailer {
   color: transparent;
 }
-.upload-trailer::-webkit-file-upload-button {
+/* .upload-trailer::-webkit-file-upload-button {
   visibility: hidden;
-}
-.upload-trailer::before {
+} */
+.upload-trailer::after {
   content: 'Upload trailer';
   color: gray;
   display: inline-block;
-  padding: 12px 0 0 0px;
+  padding: 10px 0 0 0px;
   outline: none;
   white-space: nowrap;
   cursor: pointer;
@@ -82,4 +82,16 @@ body {
 .season-options:hover {
 background: red !important;
 color: white;
+}
+
+/* multi select */
+
+.rmsc .dropdown-container {
+  border : 1px solid black !important;
+  height: 45px !important;
+  border-radius: 6px !important;
+}
+
+.rmsc .gray {
+  color: gray !important;
 }

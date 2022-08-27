@@ -12,12 +12,26 @@ import {
     Stack,
     FormControl,
     FormLabel,
+    useToast,
   } from '@chakra-ui/react';
   import React, { useState } from 'react';
-  const AddSeasonModal = () => {
+import { useDispatch } from 'react-redux';
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
+  const AddSeasonModal = ({seriesId}) => {
+    const toast = useToast()
+    const dispatch = useDispatch()
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [seasonName, setSeasonName] = useState();
   
+    const addSeason = () => {
+      const payload = {
+        series_id : seriesId,
+        seasonName : seasonName
+      }
+      if(!seasonName) {
+        ErrorToaster(toast,'Please enter season name')
+      }
+    }
     return (
       <>
         <Button size={'sm'} colorScheme="facebook" onClick={onOpen}>
@@ -57,7 +71,7 @@ import {
                       borderRadius={'lg'}
                       size={'md'}
                       colorScheme={'blue'}
-                      // onClick={() => submitHandler()}
+                      onClick={() => addSeason()}
                     >
                       {' '}
                       Add Season

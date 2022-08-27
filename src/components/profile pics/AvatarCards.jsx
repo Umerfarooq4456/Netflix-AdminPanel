@@ -1,21 +1,32 @@
-import { Button, IconButton, Image, Input, Stack, Textarea } from '@chakra-ui/react';
+import { Button, IconButton, Image,Stack,useToast } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react';
 import { TiDelete } from 'react-icons/ti';
+import { useDispatch } from 'react-redux';
+import { addProfileAvatar } from '../../redux/actions/profileavatar/ProfileAvatar';
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
 
 const AvatarCards = ({ filesData,avatarTitle,setavatarTitle}) => {
+  const toast = useToast()
+  const dispatch =  useDispatch()
   const images = useMemo(() => filesData);
   const [products, setproducts] = useState(images || []);
   const deleteImage = key => {
     setproducts(products.filter(i => i.name !== key));
   };
   const uploadAvatars = () => {
-    const payload = {
-        avatarTitle:avatarTitle,
-        files:products
+    const payload =  new FormData()
+    payload.append('title',avatarTitle)
+    payload.append('images',products)
+    if(!avatarTitle || !filesData) {
+      ErrorToaster(toast,'Please Upload files')
     }
-    setproducts('')
-    setavatarTitle('')
-    console.log(payload)
+    else {
+      dispatch(addProfileAvatar(payload,toast))
+      console.log(payload.get('images'))
+    //   setproducts('')
+    //   setavatarTitle('')
+    // 
+    }
   }
 
   return (

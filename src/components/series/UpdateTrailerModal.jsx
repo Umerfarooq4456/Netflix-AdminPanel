@@ -12,14 +12,35 @@ import {
   Stack,
   FormControl,
   FormLabel,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-const UpdateTrailerModal = () => {
+import { useDispatch } from 'react-redux';
+import { updateSeriesTrailer } from '../../redux/actions/Series/Series';
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
+const UpdateTrailerModal = ({data}) => {
+  const toast = useToast()
+  const dispatch =  useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [seriesName, setseriesName] = useState();
+  const [trailer, setTrailer] = useState();
   // supported image formats
   const supportedTrailerFormats = ['video/mp4'];
 
+  const updateTrailerHandler = () => {
+    const payload = {
+      series_id: data?._id,
+      trailer: trailer,
+    };
+    console.log(
+      '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 34 ~ updateThumbnail ~ payload',
+      payload
+    );
+    if (!trailer) {
+      ErrorToaster(toast, 'Please choose trailer');
+    } else {
+      dispatch(updateSeriesTrailer(payload, toast));
+    }
+  };
   return (
     <>
       <Button colorScheme="facebook" size={'sm'} onClick={onOpen}>
@@ -50,6 +71,7 @@ const UpdateTrailerModal = () => {
                     p="1.5"
                     border={'1px solid black !important'}
                     size={'lg'}
+                    onChange={(e)=>setTrailer(e.target.files[0])}
                     type="file"
                   />
                 </FormControl>
@@ -58,7 +80,7 @@ const UpdateTrailerModal = () => {
                     borderRadius={'lg'}
                     size={'lg'}
                     colorScheme={'red'}
-                    // onClick={() => submitHandler()}
+                    onClick={() => updateTrailerHandler()}
                   >
                     {' '}
                     Update

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Table,
   Thead,
@@ -10,40 +10,36 @@ import {
   Stack,
   Button,
   Heading,
-  Select,
   Spinner,
-  Toast,
   useToast,
   Badge,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import AddSeriesModal from './AddSeriesModal';
-import EditInfoModal from './EditInfoModal';
-import UpdateThumbnailModal from './UpdateThumbnailModal';
-import UpdateTrailerModal from './UpdateTrailerModal';
-import {
-  deactiveSeries,
-  getAllSeries,
-} from '../../redux/actions/Series/Series';
 import { useDispatch, useSelector } from 'react-redux/es/exports';
+import AddLangugeModal from './AddLanguageModal';
+import UpdateLanguageModal from './UpdateLanguageModal';
+import { changeLanguageyStatus, getAllLanguages } from '../../redux/actions/language/Language';
+import AddLanguageModal from './AddLanguageModal';
 
-const Series = () => {
+const LanguageDetails = () => {
+  const { loginData } = useSelector(state => state.Auth);
+  const { allLanguages,loading } = useSelector(state => state.Language);
   const toast = useToast();
   const dispatch = useDispatch();
-  const { allSeries, loading } = useSelector(state => state.Series);
-  console.log(allSeries);
+
   useEffect(() => {
-    dispatch(getAllSeries(toast));
+    const payload = { user_id: loginData?.data?.user?._id };
+    dispatch(getAllLanguages(payload, toast));
   }, []);
 
-  const nav = useNavigate();
+  // const changeStatus = (id) =>{
+  //   const changeLanguagePayload={
+  //       language_id : id
+  //   }
+  //   const payload = { user_id: loginData?.data?.user?._id };
+  //   dispatch(changeLanguageyStatus(changeLanguagePayload,toast))
+  //   dispatch(getAllLanguages(payload, toast));
+  // }
 
-  const deactiveSeriesHandler = id => {
-    const payload = {
-      series_id: id,
-    };
-    dispatch(deactiveSeries(payload, toast));
-  };
   return (
     <Stack maxW={'100%'} w={'100%'} px={'8'} py="6" overflow={'auto'}>
       <Stack direction={'row'} w={'100%'} justifyContent="space-between">
@@ -52,45 +48,44 @@ const Series = () => {
           textAlign={'center'}
           fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}
         >
-          Series Details
+          Language Details
         </Heading>
-        <AddSeriesModal />
+        <AddLanguageModal />
       </Stack>
 
       {/* users detail table */}
-      <TableContainer overflowX={'auto'} w={'100%'}>
-        <Table w={'100%'} variant="striped" colorScheme="pink">
+      <TableContainer
+        maxH={'70vh'}
+        overflowY="auto"
+        overflowX={'auto'}
+        w={'100%'}
+      >
+        <Table w={'100%'} variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
               <Th color={'black'} fontSize="sm">
                 Name
               </Th>
               <Th color={'black'} fontSize="sm">
-                Active Status
+                Update Languge
               </Th>
               <Th color={'black'} fontSize="sm">
-                Update Info
+                Status
               </Th>
               <Th color={'black'} fontSize="sm">
-                Update Thumbnail
-              </Th>
-              <Th color={'black'} fontSize="sm">
-                Update Trailer
-              </Th>
-              <Th color={'black'} fontSize="sm">
-                Deactivate Series
-              </Th>
-              <Th color={'black'} fontSize="sm">
-                Manage Seasons
+                Change Status
               </Th>
             </Tr>
           </Thead>
           <Tbody>
             {loading === false ? (
-              allSeries?.series?.map(data => (
+              allLanguages?.lang?.map(data => (
                 <Tr>
                   <Td color={'black'} fontSize={'sm'} fontWeight="600">
-                    {data?.seriesName}
+                    {data?.language}
+                  </Td>
+                  <Td>
+                    <UpdateLanguageModal data={data} />
                   </Td>
                   <Td>
                     {data?.activeStatus === true ? (
@@ -112,34 +107,12 @@ const Series = () => {
                     )}
                   </Td>
                   <Td>
-                    <EditInfoModal data={data} />
-                  </Td>
-                  <Td>
-                    <UpdateThumbnailModal data={data} />
-                  </Td>
-                  <Td>
-                    <UpdateTrailerModal data={data} />
-                  </Td>
-                  <Td>
                     <Button
-                      onClick={() => deactiveSeriesHandler(data?._id)}
-                      size={'sm'}
+                      // onClick={() => changeStatus(data?._id)}
                       colorScheme="red"
+                      size="sm"
                     >
-                      Deactivate
-                    </Button>
-                  </Td>
-                  <Td>
-                    <Button
-                      size={'sm'}
-                      colorScheme="linkedin"
-                      onClick={() =>
-                        nav('/manageseasons', {
-                          state: { id: data?._id },
-                        })
-                      }
-                    >
-                      Manage Seasons
+                      Change Status
                     </Button>
                   </Td>
                 </Tr>
@@ -156,4 +129,4 @@ const Series = () => {
   );
 };
 
-export default Series;
+export default LanguageDetails;

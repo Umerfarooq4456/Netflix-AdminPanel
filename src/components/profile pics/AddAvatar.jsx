@@ -15,6 +15,7 @@ import AvatarCards from './AvatarCards';
 const AddAvatar = () => {
   const [avatarTitle, setavatarTitle] = useState();
   const [files, setFiles] = useState([]);
+  console.log("🚀 ~ file: AddAvatar.jsx ~ line 18 ~ AddAvatar ~ files", files)
   const images = useMemo(() => files, [files]);
 
   const { getRootProps, getInputProps, isFocused, isDragAccept } = useDropzone({
@@ -31,7 +32,7 @@ const AddAvatar = () => {
       );
     },
   });
-//   console.log(images);
+  //   console.log(images);
 
   return (
     <Stack w={'100%'} p="4">
@@ -85,7 +86,11 @@ const AddAvatar = () => {
       </Stack>
       {images.length !== 0 ? (
         <>
-          <AvatarCards filesData={images} avatarTitle={avatarTitle} setavatarTitle={(e)=>setavatarTitle(e)}/>
+          <AvatarCards
+            filesData={images}
+            avatarTitle={avatarTitle}
+            setavatarTitle={e => setavatarTitle(e)}
+          />
         </>
       ) : null}
     </Stack>
