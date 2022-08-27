@@ -1,32 +1,41 @@
 import {
   Button,
-  Checkbox,
   Heading,
   Input,
   SimpleGrid,
   Stack,
   Tag,
   Select,
+  useToast,
 } from '@chakra-ui/react';
 import { ImCross } from 'react-icons/im';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createSeries } from '../../redux/actions/Series/Series';
 import { useSelector, useDispatch } from 'react-redux';
-
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
+import MultiSelectDropdown from '../multiselect/MultiSelect';
+import { getAllCategories } from '../../redux/actions/category/Category';
+import { getAllLanguages } from '../../redux/actions/language/Language';
 export const AddSeriesContent = () => {
+  const toast = useToast();
   const dispatch = useDispatch();
+
   const { loginData } = useSelector(state => state.Auth);
-  const userId = loginData.data.user._id;
+  const userId = loginData?.data?.user?._id;
+  const { allCategories } = useSelector(state => state.Category);
+  const { allLanguages } = useSelector(state => state.Language);
+ 
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
   const [thumbnail, setThumbnail] = useState();
   const [trailer, setTrailer] = useState();
-  const [genre, setGenre] = useState([]);
+  const [genre, setGenre] = useState();
+  const [language, setLanguage] = useState();
   const [noOfSeasons, setNoOfSeasons] = useState();
   const [grossRating, setGrossRating] = useState();
   const [maturityRating, setmaturityRating] = useState();
   const [cast, setcast] = useState([]);
-
+console.log(typeof genre,genre)
   // cast
   const addCast = e => {
     if (e.key === 'Enter') {
@@ -41,20 +50,6 @@ export const AddSeriesContent = () => {
     const newCast = cast.filter(tag => tag !== removedCast);
     setcast(newCast);
   };
-  // genre
-  const addGenre = e => {
-    if (e.key === 'Enter') {
-      if (e.target.value.length > 0) {
-        setGenre([...genre, e.target.value]);
-
-        e.target.value = '';
-      }
-    }
-  };
-  const removeGenre = removedGenre => {
-    const newGenre = genre.filter(tag => tag !== removedGenre);
-    setGenre(newGenre);
-  };
   // supported image formats
   const supportedThumbailFormats = ['image/png', 'image/jpeg'];
   // supported image formats
@@ -62,36 +57,49 @@ export const AddSeriesContent = () => {
   // submithadler
   const submitHandler = () => {
     const payload = new FormData();
-
     payload.append('user_id', userId);
     payload.append('seriesName', seriesName);
     payload.append('thumbnail', thumbnail);
     payload.append('trailer', trailer);
     payload.append('description', description);
     payload.append('genre', genre);
+    payload.append('language', language);
     payload.append('totalNumberOfSeasons', noOfSeasons);
     payload.append('grossRatings', grossRating);
     payload.append('cast', cast);
     payload.append('maturityRating', maturityRating);
-    payload.forEach((value, key) => {
-      console.log(key, value);
-    });
-
-    dispatch(createSeries(payload));
-
-    setseriesName('');
-    setThumbnail('');
-    setTrailer('');
-    setdescription('');
-    setGenre('');
-    setNoOfSeasons('');
-    setGrossRating('');
-    setcast('');
-    setmaturityRating('');
+    if (
+      !thumbnail ||
+      !trailer ||
+      !seriesName ||
+      !description ||
+      !genre ||
+      !noOfSeasons ||
+      !grossRating ||
+      !maturityRating ||
+      !cast
+    ) {
+      ErrorToaster(toast, 'Please fill all details');
+    } else {
+      dispatch(createSeries(payload, toast));
+      setseriesName('');
+      setThumbnail('');
+      setTrailer('');
+      setdescription('');
+      setGenre('');
+      setNoOfSeasons('');
+      setGrossRating('');
+      setcast('');
+      setmaturityRating('');
+    }
   };
-
+  useEffect(() => {
+    const payload = { user_id: loginData?.data?.user?._id };
+    dispatch(getAllCategories(payload, toast));
+    dispatch(getAllLanguages(payload, toast));
+  }, []);
   return (
-    <Stack py="6" px={{ base: '4', md: '18', lg: '24' }}>
+    <Stack py="6" px={{ base: '0', md: '18', lg: '48' }}>
       <Heading
         pb={'6'}
         textAlign={'center'}
@@ -131,7 +139,6 @@ export const AddSeriesContent = () => {
             isRequired
           />
         </Stack>
-
         {/* thumbnail and trailer  */}
         <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
           <Input
@@ -261,63 +268,32 @@ export const AddSeriesContent = () => {
             ))}
           </SimpleGrid>
         ) : null}
-        {/* genre*/}
-        <Stack mr={'7 !important'}>
-          <Input
-            w={{ base: '100%', md: '50%' }}
-            size={'lg'}
-            _hover={{}}
-            _focusVisible={{}}
-            borderColor="black"
-            placeholder="genre"
-            onKeyDown={addGenre}
-            isRequired
-          />
+        <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
+          <Stack w={{ base: '100%', md: '50%' }}>
+            {allCategories ? (
+              <MultiSelectDropdown
+                data={allCategories?.data}
+                array={e => setGenre(e)}
+                type={'category'}
+              />
+            ) : null}
+          </Stack>
+          <Stack w={{ base: '100%', md: '50%' }}>
+            {allLanguages? (
+              <MultiSelectDropdown
+                data={allLanguages?.lang}
+                array={e => setLanguage(e)}
+                type={'language'}
+              />
+            ) : null}
+          </Stack>
         </Stack>
-        {/* genre preview */}
-        {genre.length > 0 ? (
-          <SimpleGrid
-            w={{ base: '100%', md: '50%' }}
-            direction={'row'}
-            minChildWidth="120px"
-            spacingX="10px"
-            spacingY={'15px'}
-          >
-            {genre?.map((genre, index) => (
-              <Stack w={'fit-content'} h="fitcontent" pos={'relative'}>
-                {' '}
-                <Tag
-                  key={index}
-                  h={'40px'}
-                  border="1px solid orange"
-                  borderRadius="md"
-                  colorScheme={'purple'}
-                >
-                  {genre} {''}
-                </Tag>
-                <Stack
-                  onClick={() => removeGenre(genre)}
-                  _hover={{
-                    cursor: 'pointer',
-                    transform: 'scale(1.3)',
-                  }}
-                  transition="transform .2s"
-                  pos={'absolute'}
-                  top="-15px"
-                  right="-5px"
-                >
-                  <ImCross fontSize={'0.8rem'} color="red" />
-                </Stack>
-              </Stack>
-            ))}
-          </SimpleGrid>
-        ) : null}
         {/* submit button */}
         <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
           <Button
             borderRadius={'lg'}
             size={'lg'}
-            w={{ base: '60%', md: '25%', lg: '20%' }}
+            w={'fit-content'}
             colorScheme={'red'}
             onClick={() => submitHandler()}
           >

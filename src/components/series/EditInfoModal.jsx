@@ -18,7 +18,7 @@ import {
 import React, { useState } from 'react';
 import { ImCross } from 'react-icons/im';
 
-const EditInfoModal = () => {
+const EditInfoModal = ({data}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
@@ -56,6 +56,7 @@ const EditInfoModal = () => {
     const newCast = cast.filter(tag => tag !== removedCast);
     setcast(newCast);
   };
+  console.log(data)
   return (
     <>
       <Button size={'sm'} colorScheme="cyan" onClick={onOpen}>
@@ -87,7 +88,7 @@ const EditInfoModal = () => {
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
                   <Input
                     w={{ base: '100%', md: '50%' }}
-                    value={seriesName}
+                    defaultValue={data?.seriesName}
                     onChange={e => setseriesName(e.target.value)}
                     size={'lg'}
                     _hover={{}}
@@ -98,7 +99,7 @@ const EditInfoModal = () => {
                   />
                   <Input
                     w={{ base: '100%', md: '50%' }}
-                    value={description}
+                    value={data?.description}
                     onChange={e => setdescription(e.target.value)}
                     size={'lg'}
                     _hover={{}}
@@ -115,7 +116,7 @@ const EditInfoModal = () => {
                     isRequired
                     fontSize={{ base: 'md', md: 'lg' }}
                     w={{ base: '100%', md: '50%' }}
-                    defaultValue={grossRating}
+                    defaultValue={data?.grossRatings}
                     onChange={e => setGrossRating(e.target.value)}
                     _hover={{ cursor: 'pointer' }}
                     borderColor="black"
@@ -134,7 +135,7 @@ const EditInfoModal = () => {
                     isRequired
                     fontSize={{ base: 'md', md: 'lg' }}
                     w={{ base: '100%', md: '50%' }}
-                    value={maturityRating}
+                    value={data?.maturityRating}
                     onChange={e => setmaturityRating(e.target.value)}
                     _hover={{ cursor: 'pointer' }}
                     borderColor="black"
@@ -157,7 +158,7 @@ const EditInfoModal = () => {
                     _focusVisible={{}}
                     type="number"
                     borderColor="black"
-                    value={noOfSeasons}
+                    value={data?.totalNumberOfSeasons}
                     onChange={e => setNoOfSeasons(e.target.value)}
                     placeholder="Total Seasons"
                     isRequired

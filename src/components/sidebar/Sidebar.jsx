@@ -1,9 +1,6 @@
 import {
   Stack,
-  Text,
-  Image,
   HStack,
-  IconButton,
   Heading,
 } from '@chakra-ui/react';
 
@@ -12,20 +9,23 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AiFillHome } from 'react-icons/ai';
 import { FaUserFriends } from 'react-icons/fa';
 import { MdMovie } from 'react-icons/md';
-import { AiOutlineTransaction } from 'react-icons/ai';
 import {BsFillCollectionPlayFill} from 'react-icons/bs'
 import { RiUserStarFill } from 'react-icons/ri';
+import { BiCategoryAlt } from 'react-icons/bi';
+import {MdOutlineLanguage} from 'react-icons/md'
 const Sidebar = () => {
   const location = useLocation();
   const nav = useNavigate();
   return (
     <Stack
-      overflow={'hidden'}
+      display={{base:'none',md:'inherit'}}
+      overflow={'auto'}
       bg={'#1D1D1D'}
       h="calc(100vh-60px)"
+      maxH={"90vh"}
       mt="60px"
       minH="calc(100vh - 60px)"
-      w={'20%'}
+      w={{md:'25%',lg:'20%'}}
     >
       <Stack
         py={'6'}
@@ -41,11 +41,11 @@ const Sidebar = () => {
             Dashboard
           </Heading>
           <HStack
-            onClick={() => nav('/dashboard')}
+            onClick={() => nav('/')}
             _hover={{ cursor: 'pointer' }}
             py="3"
             className={
-              location.pathname === '/dashboard' ? 'link-active' : 'link'
+              location.pathname === '/' ? 'link-active' : 'link'
             }
             w={'100%'}
             px="4"
@@ -96,7 +96,7 @@ const Sidebar = () => {
             </Heading>
           </HStack>
           {/* transactions */}
-          <HStack
+          {/* <HStack
             onClick={() => nav('/transactions')}
             _hover={{ cursor: 'pointer' }}
             py="3"
@@ -111,6 +111,42 @@ const Sidebar = () => {
             <AiOutlineTransaction fontSize={'1.4rem'} />
             <Heading fontWeight={'400'} fontSize="lg">
               Transactions
+            </Heading>
+          </HStack> */}
+          {/* categories */}
+          <HStack
+            onClick={() => nav('/categories')}
+            _hover={{ cursor: 'pointer' }}
+            py="3"
+            className={
+              location.pathname === '/categories' ? 'link-active' : 'link'
+            }
+            w={'100%'}
+            px="4"
+            spacing={'5'}
+            color="white"
+          >
+            <BiCategoryAlt fontSize={'1.4rem'} />
+            <Heading fontWeight={'400'} fontSize="lg">
+              Categories
+            </Heading>
+          </HStack>
+          {/* languages */}
+          <HStack
+            onClick={() => nav('/languages')}
+            _hover={{ cursor: 'pointer' }}
+            py="3"
+            className={
+              location.pathname === '/languages' ? 'link-active' : 'link'
+            }
+            w={'100%'}
+            px="4"
+            spacing={'5'}
+            color="white"
+          >
+            <MdOutlineLanguage color='white' fontSize={'1.4rem'} />
+            <Heading fontWeight={'400'} fontSize="lg">
+              Languages
             </Heading>
           </HStack>
         </Stack>

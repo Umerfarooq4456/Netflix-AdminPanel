@@ -9,6 +9,8 @@ import Users from '../../screens/Users';
 import AddMovie from '../../screens/movies/AddMovie';
 import Movies from '../../screens/movies/Movies';
 import Avatar from '../../screens/Avatar';
+import Categories from '../../screens/category/Categories';
+import Language from '../../screens/language/Language';
 
 const MainRoutes = () => {
   return (
@@ -74,6 +76,24 @@ const MainRoutes = () => {
           <PrivateRoutes>
             {' '}
             <SeasonsScreen />{' '}
+          </PrivateRoutes>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <PrivateRoutes>
+            {' '}
+            <Categories />{' '}
+          </PrivateRoutes>
+        }
+      />
+      <Route
+        path="/languages"
+        element={
+          <PrivateRoutes>
+            {' '}
+            <Language />{' '}
           </PrivateRoutes>
         }
       />

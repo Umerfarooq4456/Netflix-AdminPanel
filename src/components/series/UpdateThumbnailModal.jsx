@@ -12,14 +12,42 @@ import {
   Stack,
   FormControl,
   FormLabel,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-const UpdateThumbnailModal = () => {
+import { useDispatch } from 'react-redux';
+import { updateSeriesThumbnail } from '../../redux/actions/Series/Series';
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
+const UpdateThumbnailModal = ({ data }) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [seriesName, setseriesName] = useState();
+  const [thumbnail, setThumbnail] = useState('');
+  console.log(
+    '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 26 ~ UpdateThumbnailModal ~ thumbnail',
+    thumbnail
+  );
   // supported image formats
   const supportedThumbailFormats = ['image/png', 'image/jpeg'];
-
+  const updateThumbnail = () => {
+    const payload = {
+      series_id: data?._id,
+      thumbnail: thumbnail,
+    };
+    console.log(
+      '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 34 ~ updateThumbnail ~ payload',
+      payload
+    );
+    if (!thumbnail) {
+      ErrorToaster(toast, 'Please choose Thumbnail');
+    } else {
+      console.log(
+        '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 46 ~ updateThumbnail ~ payload',
+        payload
+      );
+      dispatch(updateSeriesThumbnail(payload, toast));
+    }
+  };
   return (
     <>
       <Button size={'sm'} colorScheme="facebook" onClick={onOpen}>
@@ -44,13 +72,14 @@ const UpdateThumbnailModal = () => {
                 <FormControl>
                   <FormLabel color={'black'}>Upload Thumbnail</FormLabel>
                   <Input
+                    type={'file'}
+                    size={'md'}
+                    onChange={e => setThumbnail(e.target.files[0])}
                     accept={supportedThumbailFormats}
-                    rounded={'md'}
+                    borderColor="black"
+                    _focusVisible={{}}
                     _hover={{ cursor: 'pointer' }}
-                    p="1.5"
-                    border={'1px solid black !important'}
-                    size={'lg'}
-                    type="file"
+                    isRequired
                   />
                 </FormControl>
                 <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
@@ -58,7 +87,7 @@ const UpdateThumbnailModal = () => {
                     borderRadius={'lg'}
                     size={'lg'}
                     colorScheme={'red'}
-                    // onClick={() => submitHandler()}
+                    onClick={() => updateThumbnail()}
                   >
                     {' '}
                     Update

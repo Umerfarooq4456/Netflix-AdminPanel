@@ -1,47 +1,44 @@
-import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Stack,
-  Flex,
   Button,
   FormControl,
   FormLabel,
-  Heading,
   Input,
   Image,
-  Link,
   Switch,
-  Text,
+  useToast,
 } from '@chakra-ui/react';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
 import { authLogin } from '../../redux/actions/Auth/Auth';
-
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
 const Login = () => {
+  const { loading } = useSelector(state => state.Auth);
+  const toast = useToast();
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const email = useRef();
-  const password = useRef();
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
 
   const submitHandler = e => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert('Invalid form');
+    if (!email || !password ) {
+      ErrorToaster(toast,'Please Enter email and password')
       console.log(email, password);
-      return;
+    } 
+    else {
+      const payload = {
+        email: email,
+        password: password,
+      };
+      dispatch(authLogin(payload, nav, toast));
+      setEmail('')
+      setPassword('')
     }
-
-    const payload = {
-      email: email.current.value,
-
-      password: password.current.value,
-    };
-    dispatch(authLogin(payload, nav));
-    console.log(payload);
-    email.current.value = '';
-    password.current.value = '';
   };
   return (
     <Stack
@@ -76,7 +73,8 @@ const Login = () => {
               placeholder="Enter Your email address"
               size="lg"
               fontWeight={'600'}
-              ref={email}
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </FormControl>
           {/* password */}
@@ -92,7 +90,8 @@ const Login = () => {
               type="password"
               placeholder="Enter Your password"
               size="lg"
-              ref={password}
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
             />
           </FormControl>
           {/* remember me */}
@@ -114,7 +113,6 @@ const Login = () => {
           <Button
             onClick={e => {
               submitHandler(e);
-              nav('/dashboard');
             }}
             alignSelf={'center'}
             fontSize="md"
@@ -122,6 +120,7 @@ const Login = () => {
             colorScheme={'red'}
             w="30%"
             h="45"
+            isLoading={loading}
           >
             SIGN IN
           </Button>
