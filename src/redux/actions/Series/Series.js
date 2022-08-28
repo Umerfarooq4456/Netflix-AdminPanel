@@ -14,6 +14,7 @@ import {
   DEACTIVE_SERIES_LOADING,
   DEACTIVE_SERIES_SUCCESS,
   DEACTIVE_SERIES_FAILED,
+  
 } from './constants';
 import {
   createSeriesServices,
@@ -89,8 +90,8 @@ export const updateSeriesTrailer = (data, toast) => async dispatch => {
 export const deactiveSeries = (payload, toast) => async dispatch => {
   try {
     dispatch({ type: DEACTIVE_SERIES_LOADING });
-    const { data } = await deactiveSeriesServices(payload);
-    dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: { data, payload } });
+    const res = await deactiveSeriesServices(payload);
+    dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: { res, payload } });
     SuccessToaster(toast, res?.data?.message);
   } catch (error) {
     ErrorToaster(toast, error?.response?.data?.message || error?.message);

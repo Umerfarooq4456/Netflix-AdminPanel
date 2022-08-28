@@ -11,16 +11,35 @@ import {
   Button,
   Heading,
   Select,
+  useToast,
+  Spinner
 } from '@chakra-ui/react';
 
 import { useNavigate } from 'react-router-dom';
 import AddSeasonModal from './AddSeasonModal';
 import { useLocation } from 'react-router-dom';
 import { BiPlus } from 'react-icons/bi';
+import { getAllSeasons } from '../../redux/actions/seasons/Season';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
+
+
 const Seasons = () => {
   const nav = useNavigate();
+  const toast = useToast();
   const { state } = useLocation();
+  const dispatch = useDispatch()
+  console.log("🚀 ~ file: Seasons.jsx ~ line 23 ~ Seasons ~ state", state)
   const { id } = state;
+  console.log("🚀 ~ file: Seasons.jsx ~ line 25 ~ Seasons ~ id", id)
+  // const { getSeasons, loading } = useSelector(state => state.Seasons);
+
+
+  useEffect(() => {
+    const payload = {
+      series_id: id,
+    };
+    dispatch(getAllSeasons(payload, toast));
+  }, []);
 
   return (
     <Stack spacing={'4'} maxW={'100%'} w={'100%'} px={'8'} py="6">
@@ -45,6 +64,7 @@ const Seasons = () => {
           size="lg"
           bg="transparent"
         >
+          { }
           <option className="season-options" value="Season1">
             Season1
           </option>
@@ -84,6 +104,8 @@ const Seasons = () => {
             </Tr>
           </Thead>
           <Tbody>
+            {/* {loading === false ? (
+              getSeasons?.data.map(data => ( */}
             <Tr>
               <Td color={'black'} fontSize={'sm'} fontWeight="600">
                 Dustin
@@ -102,6 +124,13 @@ const Seasons = () => {
                 </Button>
               </Td>
             </Tr>
+            {/* )) */}
+            {/* ) : ( */}
+            {/* <Stack p="2" w={'100%'} alignItems="center">
+              <Spinner colorScheme="red" size={'lg'} />
+            </Stack> */}
+            {/* )} */}
+
           </Tbody>
         </Table>
       </TableContainer>
