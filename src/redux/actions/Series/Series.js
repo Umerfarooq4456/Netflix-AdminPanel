@@ -17,6 +17,7 @@ import {
   UPDATE_SERIES_INFO_LOADING,
   UPDATE_SERIES_INFO_SUCCESS,
   UPDATE_SERIES_INFO_FAILED,
+
 } from './constants';
 import {
   createSeriesServices,
@@ -96,6 +97,9 @@ export const deactiveSeries = (payload, toast) => async dispatch => {
     const { data } = await deactiveSeriesServices(payload);
     dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: { data, payload } });
     SuccessToaster(toast, data?.message);
+    const res = await deactiveSeriesServices(payload);
+    dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: { res, payload } });
+    SuccessToaster(toast, res?.data?.message);
   } catch (error) {
     ErrorToaster(toast, error?.response?.data?.message || error?.message);
     dispatch({ type: DEACTIVE_SERIES_FAILED, payload: error });

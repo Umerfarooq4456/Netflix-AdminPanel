@@ -25,12 +25,13 @@ import {
   deactiveSeries,
   getAllSeries,
 } from '../../redux/actions/Series/Series';
-import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Series = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const { allSeries, loading } = useSelector(state => state.Series);
+  console.log("🚀 ~ file: Series.jsx ~ line 34 ~ Series ~ allSeries", allSeries)
   console.log(allSeries);
   useEffect(() => {
     dispatch(getAllSeries(toast));
