@@ -24,6 +24,7 @@ export const AddSeriesContent = () => {
   const userId = loginData?.data?.user?._id;
   const { allCategories } = useSelector(state => state.Category);
   const { allLanguages } = useSelector(state => state.Language);
+  const { loading } = useSelector(state => state.Series);
  
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
@@ -35,7 +36,7 @@ export const AddSeriesContent = () => {
   const [grossRating, setGrossRating] = useState();
   const [maturityRating, setmaturityRating] = useState();
   const [cast, setcast] = useState([]);
-console.log(typeof genre,genre)
+  const [seriesCast, setSeriesCast] = useState([]);
   // cast
   const addCast = e => {
     if (e.key === 'Enter') {
@@ -54,8 +55,11 @@ console.log(typeof genre,genre)
   const supportedThumbailFormats = ['image/png', 'image/jpeg'];
   // supported image formats
   const supportedTrailerFormats = ['video/mp4'];
-  // submithadler
+  // submit handler
+
   const submitHandler = () => {
+    const str = String(cast)
+    setSeriesCast(str)
     const payload = new FormData();
     payload.append('user_id', userId);
     payload.append('seriesName', seriesName);
@@ -66,7 +70,7 @@ console.log(typeof genre,genre)
     payload.append('language', language);
     payload.append('totalNumberOfSeasons', noOfSeasons);
     payload.append('grossRatings', grossRating);
-    payload.append('cast', cast);
+    payload.append('cast', seriesCast);
     payload.append('maturityRating', maturityRating);
     if (
       !thumbnail ||
@@ -80,17 +84,18 @@ console.log(typeof genre,genre)
       !cast
     ) {
       ErrorToaster(toast, 'Please fill all details');
+      console.log(payload.get('cast'))
     } else {
       dispatch(createSeries(payload, toast));
-      setseriesName('');
-      setThumbnail('');
-      setTrailer('');
-      setdescription('');
-      setGenre('');
-      setNoOfSeasons('');
-      setGrossRating('');
-      setcast('');
-      setmaturityRating('');
+      // setseriesName('');
+      // setThumbnail('');
+      // setTrailer('');
+      // setdescription('');
+      // setGenre('');
+      // setNoOfSeasons('');
+      // setGrossRating('');
+      // setcast('');
+      // setmaturityRating('');
     }
   };
   useEffect(() => {
@@ -231,7 +236,7 @@ console.log(typeof genre,genre)
           />
         </Stack>
         {/* cast names preview */}
-        {cast.length !== 0 ? (
+        {cast?.length !== 0 ? (
           <SimpleGrid
             w={{ base: '100%', md: '50%' }}
             minChildWidth="120px"
@@ -268,6 +273,7 @@ console.log(typeof genre,genre)
             ))}
           </SimpleGrid>
         ) : null}
+        {/* select genre and languages */}
         <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
           <Stack w={{ base: '100%', md: '50%' }}>
             {allCategories ? (
@@ -291,6 +297,7 @@ console.log(typeof genre,genre)
         {/* submit button */}
         <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
           <Button
+          // isLoading={loading}
             borderRadius={'lg'}
             size={'lg'}
             w={'fit-content'}

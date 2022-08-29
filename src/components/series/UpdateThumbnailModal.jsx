@@ -13,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   useToast,
+  Image,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -69,6 +70,7 @@ const UpdateThumbnailModal = ({ data }) => {
                 Update Series Thumbnail
               </Heading>
               <Stack px={{ base: '2', md: '4' }} w={'100%'}>
+                <Image src={data?.thumbnail} w='32'/>
                 <FormControl>
                   <FormLabel color={'black'}>Upload Thumbnail</FormLabel>
                   <Input

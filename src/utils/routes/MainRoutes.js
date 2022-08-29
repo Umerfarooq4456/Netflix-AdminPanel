@@ -6,7 +6,6 @@ import SeasonsScreen from '../../screens/SeasonsScreen';
 import SeriesScreen from '../../screens/SeriesScreen';
 import PrivateRoutes from './PrivateRoutes';
 import Users from '../../screens/Users';
-import AddMovie from '../../screens/movies/AddMovie';
 import Movies from '../../screens/movies/Movies';
 import Avatar from '../../screens/Avatar';
 import Categories from '../../screens/category/Categories';
@@ -31,15 +30,6 @@ const MainRoutes = () => {
           <PrivateRoutes>
             {' '}
             <Users />{' '}
-          </PrivateRoutes>
-        }
-      />
-      <Route
-        path="/addmovie"
-        element={
-          <PrivateRoutes>
-            {' '}
-            <AddMovie />{' '}
           </PrivateRoutes>
         }
       />

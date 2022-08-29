@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useNavigate } from 'react-router-dom';
-import ManageCategoriesModal from './ManageCategoiesModal';
+import ManageCategoriesModal from './AddMovieModal';
 const MoviesDetails = () => {
   const nav = useNavigate();
 

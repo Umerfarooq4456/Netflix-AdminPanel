@@ -8,3 +8,5 @@ export const updateSeriesThumbnailServices = (data) => axios.post('/api/update_s
 export const updateSeriesTrailerServices = (data) => axios.post('/api/update_series_trailer', data);
 
 export const deactiveSeriesServices = (data) => axios.post('/api/deactive_series', data);
+
+export const updateSeriesInfoServices = (data) => axios.post('/api/update_series_info', data);

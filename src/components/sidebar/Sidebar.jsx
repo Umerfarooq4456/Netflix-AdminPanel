@@ -95,6 +95,22 @@ const Sidebar = () => {
               Movies
             </Heading>
           </HStack>
+          {/* series */}
+          <HStack
+            onClick={() => nav('/series')}
+            _hover={{ cursor: 'pointer' }}
+            py="3"
+            className={location.pathname === '/series' ? 'link-active' : 'link'}
+            w={'100%'}
+            px="4"
+            spacing={'5'}
+            color="white"
+          >
+            <BsFillCollectionPlayFill fontSize={'1.4rem'} />
+            <Heading fontWeight={'400'} fontSize="lg">
+              Series
+            </Heading>
+          </HStack>
           {/* transactions */}
           {/* <HStack
             onClick={() => nav('/transactions')}
@@ -156,37 +172,6 @@ const Sidebar = () => {
             New
           </Heading>
           
-          {/* movies */}
-          <HStack
-            onClick={() => nav('/addmovie')}
-            _hover={{ cursor: 'pointer' }}
-            py="3"
-            className={location.pathname === '/addmovie' ? 'link-active' : 'link'}
-            w={'100%'}
-            px="4"
-            spacing={'5'}
-            color="white"
-          >
-            <MdMovie fontSize={'1.4rem'} />
-            <Heading fontWeight={'400'} fontSize="lg">
-              Movie
-            </Heading>
-          </HStack>
-          <HStack
-            onClick={() => nav('/series')}
-            _hover={{ cursor: 'pointer' }}
-            py="3"
-            className={location.pathname === '/series' ? 'link-active' : 'link'}
-            w={'100%'}
-            px="4"
-            spacing={'5'}
-            color="white"
-          >
-            <BsFillCollectionPlayFill fontSize={'1.4rem'} />
-            <Heading fontWeight={'400'} fontSize="lg">
-              Series
-            </Heading>
-          </HStack>
           <HStack
             onClick={() => nav('/addavatars')}
             _hover={{ cursor: 'pointer' }}

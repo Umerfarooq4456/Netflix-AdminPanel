@@ -12,8 +12,7 @@ import {
 
 const initialState = {
   loading: false,
-  series: [],
-  allSeries: [],
+  allSeries: null,
   error: null,
 };
 
@@ -22,8 +21,8 @@ export const Series = (state = initialState, { type, payload }) => {
     case CREATE_SERIES_LOADING:
       return { ...state, loading: true };
     case CREATE_SERIES_SUCCESS:
-      return { ...state, loading: false, series: payload };
-    case CREATE_SERIES_FAILED:
+      return { ...state, loading: false, allSeries: [...state.allSeries, payload.data]  };
+    case CREATE_SERIES_FAILED:  
       return { ...state, error: payload };
 
     case GET_ALL_SERIES_LOADING:

@@ -13,12 +13,23 @@ import {
   Stack,
   Tag,
   Select,
+  useToast,
 } from '@chakra-ui/react';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImCross } from 'react-icons/im';
+import { getAllCategories } from '../../redux/actions/category/Category';
+import { getAllLanguages } from '../../redux/actions/language/Language';
+import MultiSelectDropdown from '../multiselect/MultiSelect';
+import { useDispatch , useSelector} from 'react-redux';
+import { updateSeriesInfo } from '../../redux/actions/Series/Series';
+import ErrorToaster from '../../utils/toaster/ErrorToaster';
+const EditInfoModal = ({ data }) => {
 
-const EditInfoModal = ({data}) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const { loginData } = useSelector(state => state.Auth);
+  const { allCategories } = useSelector(state => state.Category);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
@@ -28,20 +39,7 @@ const EditInfoModal = ({data}) => {
   const [maturityRating, setmaturityRating] = useState();
   const [cast, setcast] = useState([]);
 
-  //  genre
-  const addGenre = e => {
-    if (e.key === 'Enter') {
-      if (e.target.value.length > 0) {
-        setGenre([...genre, e.target.value]);
-
-        e.target.value = '';
-      }
-    }
-  };
-  const removeGenre = removedGenre => {
-    const newGenre = genre.filter(tag => tag !== removedGenre);
-    setGenre(newGenre);
-  };
+  
   //   cast
   const addCast = e => {
     if (e.key === 'Enter') {
@@ -56,7 +54,49 @@ const EditInfoModal = ({data}) => {
     const newCast = cast.filter(tag => tag !== removedCast);
     setcast(newCast);
   };
-  console.log(data)
+  useEffect(() => {
+    const payload = { user_id: loginData?.data?.user?._id };
+    dispatch(getAllCategories(payload, toast));
+    dispatch(getAllLanguages(payload, toast));
+  }, []);
+  // if(data){
+  //   const arr = data?.cast?.split(',');
+  //   cast.push(arr)
+  // }
+
+  const submitHandler = () => {
+    const payload = {
+      series_id : data?._id,
+      seriesName : seriesName,
+      description: description,
+      genre : genre ,
+      totalNumberOfSeasons : noOfSeasons,
+      grossRatings : grossRating,
+      maturityRating: maturityRating,
+      cast : cast
+    }
+    if (
+      !seriesName ||
+      !description ||
+      !genre ||
+      !noOfSeasons ||
+      !grossRating ||
+      !maturityRating ||
+      !cast
+    ) {
+      ErrorToaster(toast, 'Please fill all details');
+      console.log(payload)
+    } else {
+      dispatch(updateSeriesInfo(payload, toast));
+      // setseriesName('');
+      // setdescription('');
+      // setGenre('');
+      // setNoOfSeasons('');
+      // setGrossRating('');
+      // setcast('');
+      // setmaturityRating('');
+    }
+  };
   return (
     <>
       <Button size={'sm'} colorScheme="cyan" onClick={onOpen}>
@@ -212,65 +252,35 @@ const EditInfoModal = ({data}) => {
                     ))}
                   </SimpleGrid>
                 ) : null}
-                {/* genre*/}
-                <Stack mr={'7 !important'}>
-                  <Input
-                    w={{ base: '100%', md: '50%' }}
-                    size={'lg'}
-                    _hover={{}}
-                    _focusVisible={{}}
-                    borderColor="black"
-                    placeholder="genre"
-                    onKeyDown={addGenre}
-                    isRequired
-                  />
+                {/* genre and language*/}
+                <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
+                  <Stack w={{ base: '100%', md: '50%' }}>
+                    {allCategories ? (
+                      <MultiSelectDropdown
+                        data={allCategories?.data}
+                        array={e => setGenre(e)}
+                        type={'category'}
+                      />
+                    ) : null}
+                  </Stack>
+                  {/* <Stack w={{ base: '100%', md: '50%' }}>
+                    {allLanguages ? (
+                      <MultiSelectDropdown
+                        data={allLanguages?.lang}
+                        array={e => setLanguage(e)}
+                        type={'language'}
+                      />
+                    ) : null}
+                  </Stack> */}
                 </Stack>
-                {/* genre preview */}
-                {genre.length > 0 ? (
-                  <SimpleGrid
-                    w={{ base: '100%', md: '50%' }}
-                    direction={'row'}
-                    minChildWidth="120px"
-                    spacingX="10px"
-                    spacingY={'15px'}
-                  >
-                    {genre?.map((genre, index) => (
-                      <Stack w={'fit-content'} h="fitcontent" pos={'relative'}>
-                        {' '}
-                        <Tag
-                          key={index}
-                          h={'40px'}
-                          border="1px solid orange"
-                          borderRadius="md"
-                          colorScheme={'purple'}
-                        >
-                          {genre} {''}
-                        </Tag>
-                        <Stack
-                          onClick={() => removeGenre(genre)}
-                          _hover={{
-                            cursor: 'pointer',
-                            transform: 'scale(1.3)',
-                          }}
-                          transition="transform .2s"
-                          pos={'absolute'}
-                          top="-15px"
-                          right="-5px"
-                        >
-                          <ImCross fontSize={'0.8rem'} color="red" />
-                        </Stack>
-                      </Stack>
-                    ))}
-                  </SimpleGrid>
-                ) : null}
-
+                {/* submit button */}
                 <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
                   <Button
                     borderRadius={'lg'}
                     size={'lg'}
                     w={{ base: '60%', md: '25%', lg: '20%' }}
                     colorScheme={'red'}
-                    // onClick={() => submitHandler()}
+                    onClick={() => submitHandler()}
                   >
                     {' '}
                     Edit Info

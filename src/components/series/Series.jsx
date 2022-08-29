@@ -58,7 +58,7 @@ const Series = () => {
       </Stack>
 
       {/* users detail table */}
-      <TableContainer overflowX={'auto'} w={'100%'}>
+      <TableContainer overflowX={'auto'} maxH='80vh' overflowY={'auto'} w={'100%'}>
         <Table w={'100%'} variant="striped" colorScheme="pink">
           <Thead>
             <Tr>
