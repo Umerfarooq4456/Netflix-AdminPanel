@@ -16,11 +16,12 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateSeriesTrailer } from '../../redux/actions/Series/Series';
+import { updateEpisodeVideo } from '../../redux/actions/episode/episode';
+import { updateMovieTrailer } from '../../redux/actions/movie/Movie';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
-const UpdateTrailerModal = ({data}) => {
-  const toast = useToast()
-  const dispatch =  useDispatch()
+const UpdateMovieTrailerModal = ({ id }) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [trailer, setTrailer] = useState();
   // supported image formats
@@ -28,21 +29,19 @@ const UpdateTrailerModal = ({data}) => {
 
   const updateTrailerHandler = () => {
     const payload = new FormData();
-    payload.append('series_id', data?._id);
+    payload.append('movie_id', id);
     payload.append('trailer', trailer);
     if (!trailer) {
-      ErrorToaster(toast, 'Please choose Thumbnail');
+      ErrorToaster(toast, 'Please choose Trailer');
     } else {
-      console.log(
-        '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 46 ~ updateThumbnail ~ payload',
-        payload.get('thumbnail')
-      );
-      dispatch(updateSeriesTrailer(payload, toast));
+      dispatch(updateMovieTrailer(payload, toast));
+      setTrailer('');
+      onClose();
     }
   };
   return (
     <>
-      <Button colorScheme="facebook" size={'sm'} onClick={onOpen}>
+      <Button colorScheme="purple" size={'sm'} onClick={onOpen}>
         Update Trailer
       </Button>
       <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>
@@ -58,7 +57,7 @@ const UpdateTrailerModal = ({data}) => {
                 textAlign={'center'}
                 fontSize={{ base: 'xl', md: '2xl' }}
               >
-                Update Series Trailer
+                Update Movie Trailer
               </Heading>
               <Stack px={{ base: '2', md: '4' }} w={'100%'}>
                 <FormControl>
@@ -70,7 +69,7 @@ const UpdateTrailerModal = ({data}) => {
                     p="1.5"
                     border={'1px solid black !important'}
                     size={'lg'}
-                    onChange={(e)=>setTrailer(e.target.files[0])}
+                    onChange={e => setTrailer(e.target.files[0])}
                     type="file"
                   />
                 </FormControl>
@@ -94,4 +93,4 @@ const UpdateTrailerModal = ({data}) => {
   );
 };
 
-export default UpdateTrailerModal;
+export default UpdateMovieTrailerModal;

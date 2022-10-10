@@ -21,25 +21,28 @@ import { ImCross } from 'react-icons/im';
 import { getAllCategories } from '../../redux/actions/category/Category';
 import { getAllLanguages } from '../../redux/actions/language/Language';
 import MultiSelectDropdown from '../multiselect/MultiSelect';
-import { useDispatch , useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateSeriesInfo } from '../../redux/actions/Series/Series';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
 const EditInfoModal = ({ data }) => {
-
   const toast = useToast();
   const dispatch = useDispatch();
   const { loginData } = useSelector(state => state.Auth);
   const { allCategories } = useSelector(state => state.Category);
+  const { allLanguages } = useSelector(state => state.Language);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
   const [genre, setGenre] = useState([]);
-  const [noOfSeasons, setNoOfSeasons] = useState();
+  const [language, setLanguage] = useState([]);
   const [grossRating, setGrossRating] = useState();
   const [maturityRating, setmaturityRating] = useState();
   const [cast, setcast] = useState([]);
+  console.log(
+    '🚀 ~ file: EditInfoModal.jsx ~ line 40 ~ EditInfoModal ~ cast',
+    cast
+  );
 
-  
   //   cast
   const addCast = e => {
     if (e.key === 'Enter') {
@@ -59,43 +62,37 @@ const EditInfoModal = ({ data }) => {
     dispatch(getAllCategories(payload, toast));
     dispatch(getAllLanguages(payload, toast));
   }, []);
-  // if(data){
-  //   const arr = data?.cast?.split(',');
-  //   cast.push(arr)
-  // }
 
   const submitHandler = () => {
+    const str = String(cast);
     const payload = {
-      series_id : data?._id,
-      seriesName : seriesName,
-      description: description,
-      genre : genre ,
-      totalNumberOfSeasons : noOfSeasons,
-      grossRatings : grossRating,
-      maturityRating: maturityRating,
-      cast : cast
-    }
-    if (
-      !seriesName ||
-      !description ||
-      !genre ||
-      !noOfSeasons ||
-      !grossRating ||
-      !maturityRating ||
-      !cast
-    ) {
-      ErrorToaster(toast, 'Please fill all details');
-      console.log(payload)
-    } else {
+      series_id: data?._id,
+      seriesName: seriesName || data?.seriesName,
+      description: description || data?.description,
+      genre: genre,
+      language: language,
+      grossRatings: grossRating || data?.grossRatings,
+      maturityRating: maturityRating || data?.maturityRating,
+      cast: str,
+    };
+    console.log(payload)
+    // if (
+    //   !seriesName ||
+    //   !description 
+    // ) {
+    //   ErrorToaster(toast, 'Please fill all details');
+    //   console.log(payload);
+    // } else {
       dispatch(updateSeriesInfo(payload, toast));
+
       // setseriesName('');
       // setdescription('');
       // setGenre('');
       // setNoOfSeasons('');
       // setGrossRating('');
-      // setcast('');
+      // setcast([]);
       // setmaturityRating('');
-    }
+    // }
   };
   return (
     <>
@@ -115,7 +112,7 @@ const EditInfoModal = ({ data }) => {
                 textAlign={'center'}
                 fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}
               >
-                Add New Series
+                Edit Series Info
               </Heading>
               <Stack
                 maxH={'70vh'}
@@ -139,7 +136,7 @@ const EditInfoModal = ({ data }) => {
                   />
                   <Input
                     w={{ base: '100%', md: '50%' }}
-                    value={data?.description}
+                    defaultValue={data?.description}
                     onChange={e => setdescription(e.target.value)}
                     size={'lg'}
                     _hover={{}}
@@ -175,7 +172,7 @@ const EditInfoModal = ({ data }) => {
                     isRequired
                     fontSize={{ base: 'md', md: 'lg' }}
                     w={{ base: '100%', md: '50%' }}
-                    value={data?.maturityRating}
+                    defaultValue={data?.maturityRating}
                     onChange={e => setmaturityRating(e.target.value)}
                     _hover={{ cursor: 'pointer' }}
                     borderColor="black"
@@ -191,18 +188,18 @@ const EditInfoModal = ({ data }) => {
                 </Stack>
                 {/* no of seasons and cast */}
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-                  <Input
+                  {/* <Input
                     w={{ base: '100%', md: '50%' }}
                     size={'lg'}
                     _hover={{}}
                     _focusVisible={{}}
                     type="number"
                     borderColor="black"
-                    value={data?.totalNumberOfSeasons}
+                    defaultValue={data?.totalNumberOfSeasons}
                     onChange={e => setNoOfSeasons(e.target.value)}
                     placeholder="Total Seasons"
                     isRequired
-                  />
+                  /> */}
                   <Input
                     w={{ base: '100%', md: '50%' }}
                     size={'lg'}
@@ -215,7 +212,7 @@ const EditInfoModal = ({ data }) => {
                   />
                 </Stack>
                 {/* cast names preview */}
-                {cast.length !== 0 ? (
+                {/* {cast?.length !== 0 ? (
                   <SimpleGrid
                     w={{ base: '100%', md: '50%' }}
                     minChildWidth="120px"
@@ -251,7 +248,7 @@ const EditInfoModal = ({ data }) => {
                       </Stack>
                     ))}
                   </SimpleGrid>
-                ) : null}
+                ) : null} */}
                 {/* genre and language*/}
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
                   <Stack w={{ base: '100%', md: '50%' }}>
@@ -263,7 +260,7 @@ const EditInfoModal = ({ data }) => {
                       />
                     ) : null}
                   </Stack>
-                  {/* <Stack w={{ base: '100%', md: '50%' }}>
+                  <Stack w={{ base: '100%', md: '50%' }}>
                     {allLanguages ? (
                       <MultiSelectDropdown
                         data={allLanguages?.lang}
@@ -271,7 +268,7 @@ const EditInfoModal = ({ data }) => {
                         type={'language'}
                       />
                     ) : null}
-                  </Stack> */}
+                  </Stack>
                 </Stack>
                 {/* submit button */}
                 <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>

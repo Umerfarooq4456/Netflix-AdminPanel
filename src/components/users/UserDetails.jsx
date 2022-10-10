@@ -42,7 +42,57 @@ const UserDetails = () => {
         username: 'tayybah awan',
         email: 'tayybahawan@gmail.com',
         status: 'Inactive',
-      }
+      },
+      {
+        username: 'sufyan',
+        email: 'sufyan123@gmail.com',
+        status: 'active',
+      },
+      {
+        username: 'sohaib',
+        email: 'sohaib@gmail.com',
+        status: 'active',
+      },
+      {
+        username: 'zain tariq',
+        email: 'zaintariq@gmail.com',
+        status: 'Inactive',
+      },
+      {
+          username: 'syed mustafa haider',
+          email: 'mustafahaider@gmail.com',
+          status: 'active',
+        },
+        {
+          username: 'tayybah awan',
+          email: 'tayybahawan@gmail.com',
+          status: 'Inactive',
+        },
+        {
+          username: 'sufyan',
+          email: 'sufyan123@gmail.com',
+          status: 'active',
+        },
+        {
+          username: 'sohaib',
+          email: 'sohaib@gmail.com',
+          status: 'active',
+        },
+        {
+          username: 'zain tariq',
+          email: 'zaintariq@gmail.com',
+          status: 'Inactive',
+        },
+        {
+            username: 'syed mustafa haider',
+            email: 'mustafahaider@gmail.com',
+            status: 'active',
+          },
+          {
+            username: 'tayybah awan',
+            email: 'tayybahawan@gmail.com',
+            status: 'Inactive',
+          }
   ];
   useEffect(() => {
         console.log(status)

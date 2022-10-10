@@ -14,8 +14,6 @@ import { createSeries } from '../../redux/actions/Series/Series';
 import { useSelector, useDispatch } from 'react-redux';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
 import MultiSelectDropdown from '../multiselect/MultiSelect';
-import { getAllCategories } from '../../redux/actions/category/Category';
-import { getAllLanguages } from '../../redux/actions/language/Language';
 export const AddSeriesContent = () => {
   const toast = useToast();
   const dispatch = useDispatch();
@@ -25,14 +23,13 @@ export const AddSeriesContent = () => {
   const { allCategories } = useSelector(state => state.Category);
   const { allLanguages } = useSelector(state => state.Language);
   const { loading } = useSelector(state => state.Series);
- 
+
   const [seriesName, setseriesName] = useState();
   const [description, setdescription] = useState();
   const [thumbnail, setThumbnail] = useState();
   const [trailer, setTrailer] = useState();
   const [genre, setGenre] = useState();
   const [language, setLanguage] = useState();
-  const [noOfSeasons, setNoOfSeasons] = useState();
   const [grossRating, setGrossRating] = useState();
   const [maturityRating, setmaturityRating] = useState();
   const [cast, setcast] = useState([]);
@@ -58,8 +55,8 @@ export const AddSeriesContent = () => {
   // submit handler
 
   const submitHandler = () => {
-    const str = String(cast)
-    setSeriesCast(str)
+    const str = String(cast);
+    setSeriesCast(str);
     const payload = new FormData();
     payload.append('user_id', userId);
     payload.append('seriesName', seriesName);
@@ -68,7 +65,6 @@ export const AddSeriesContent = () => {
     payload.append('description', description);
     payload.append('genre', genre);
     payload.append('language', language);
-    payload.append('totalNumberOfSeasons', noOfSeasons);
     payload.append('grossRatings', grossRating);
     payload.append('cast', seriesCast);
     payload.append('maturityRating', maturityRating);
@@ -78,31 +74,15 @@ export const AddSeriesContent = () => {
       !seriesName ||
       !description ||
       !genre ||
-      !noOfSeasons ||
       !grossRating ||
-      !maturityRating ||
-      !cast
+      !maturityRating
     ) {
       ErrorToaster(toast, 'Please fill all details');
-      console.log(payload.get('cast'))
+      console.log(payload.get('cast'));
     } else {
       dispatch(createSeries(payload, toast));
-      // setseriesName('');
-      // setThumbnail('');
-      // setTrailer('');
-      // setdescription('');
-      // setGenre('');
-      // setNoOfSeasons('');
-      // setGrossRating('');
-      // setcast('');
-      // setmaturityRating('');
     }
   };
-  useEffect(() => {
-    const payload = { user_id: loginData?.data?.user?._id };
-    dispatch(getAllCategories(payload, toast));
-    dispatch(getAllLanguages(payload, toast));
-  }, []);
   return (
     <Stack py="6" px={{ base: '0', md: '18', lg: '48' }}>
       <Heading
@@ -210,20 +190,30 @@ export const AddSeriesContent = () => {
             <option value="18+">18+</option>
           </Select>
         </Stack>
-        {/* no of seasons and cast */}
+
+        {/* select genre and languages */}
         <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-          <Input
-            w={{ base: '100%', md: '50%' }}
-            size={'lg'}
-            _hover={{}}
-            _focusVisible={{}}
-            type="number"
-            borderColor="black"
-            value={noOfSeasons}
-            onChange={e => setNoOfSeasons(e.target.value)}
-            placeholder="Total Seasons"
-            isRequired
-          />
+          <Stack w={{ base: '100%', md: '50%' }}>
+            {allCategories ? (
+              <MultiSelectDropdown
+                data={allCategories?.data}
+                array={e => setGenre(e)}
+                type={'category'}
+              />
+            ) : null}
+          </Stack>
+          <Stack w={{ base: '100%', md: '50%' }}>
+            {allLanguages ? (
+              <MultiSelectDropdown
+                data={allLanguages?.lang}
+                array={e => setLanguage(e)}
+                type={'language'}
+              />
+            ) : null}
+          </Stack>
+        </Stack>
+        {/*  cast */}
+        <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
           <Input
             w={{ base: '100%', md: '50%' }}
             size={'lg'}
@@ -273,31 +263,10 @@ export const AddSeriesContent = () => {
             ))}
           </SimpleGrid>
         ) : null}
-        {/* select genre and languages */}
-        <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-          <Stack w={{ base: '100%', md: '50%' }}>
-            {allCategories ? (
-              <MultiSelectDropdown
-                data={allCategories?.data}
-                array={e => setGenre(e)}
-                type={'category'}
-              />
-            ) : null}
-          </Stack>
-          <Stack w={{ base: '100%', md: '50%' }}>
-            {allLanguages? (
-              <MultiSelectDropdown
-                data={allLanguages?.lang}
-                array={e => setLanguage(e)}
-                type={'language'}
-              />
-            ) : null}
-          </Stack>
-        </Stack>
         {/* submit button */}
         <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
           <Button
-          // isLoading={loading}
+            // isLoading={loading}
             borderRadius={'lg'}
             size={'lg'}
             w={'fit-content'}

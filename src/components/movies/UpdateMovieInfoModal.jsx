@@ -9,46 +9,44 @@ import {
   ModalCloseButton,
   Heading,
   Input,
-  Select,
   SimpleGrid,
   Stack,
   Tag,
+  Select,
   useToast,
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { ImCross } from 'react-icons/im';
 import { getAllCategories } from '../../redux/actions/category/Category';
 import { getAllLanguages } from '../../redux/actions/language/Language';
 import MultiSelectDropdown from '../multiselect/MultiSelect';
-import { addNewMovie } from '../../redux/actions/movie/Movie';
+import { useDispatch, useSelector } from 'react-redux';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
-const AddMovieModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+import { updateMovieInfo } from '../../redux/actions/movie/Movie';
+const UpdateMovieInfoModal = ({ data }) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { loginData } = useSelector(state => state.Auth);
   const { allCategories } = useSelector(state => state.Category);
   const { allLanguages } = useSelector(state => state.Language);
-  const toast = useToast();
-  const dispatch = useDispatch();
-  const [grossRating, setGrossRating] = useState();
-  const [description, setdescription] = useState();
-  const [releasingYear, setreleasingYear] = useState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [movieTitle, setmovieTitle] = useState();
+  const [description, setdescription] = useState();
+  const [duration, setduration] = useState();
+  const [releasingYear, setreleasingYear] = useState();
   const [genre, setgenre] = useState([]);
+  const [language, setlanguage] = useState([]);
+  const [grossRating, setGrossRating] = useState();
   const [maturityRating, setmaturityRating] = useState();
   const [cast, setcast] = useState([]);
-  const [thumbnail, setThumbnail] = useState();
-  const [trailer, setTrailer] = useState();
-  const [duration, setduration] = useState();
+  //   console.log("🚀 ~ file: UpdateMovieInfoModal.jsx ~ line 45 ~ UpdateMovieInfoModal ~ cast", cast)
   const [writer, setwriter] = useState([]);
   const [director, setdirector] = useState([]);
-  const [language, setlanguage] = useState([]);
-  const [movieVideo, setMovieVideo] = useState();
 
-  // cast
+  //   cast
   const addCast = e => {
     if (e.key === 'Enter') {
       if (e.target.value.length > 0) {
@@ -90,76 +88,42 @@ const AddMovieModal = () => {
     const newDirector = director.filter(tag => tag !== removedDirector);
     setdirector(newDirector);
   };
-  // supported image formats
-  const supportedThumbailFormats = ['image/png', 'image/jpeg'];
-  // supported image formats
-  const supportedTrailerFormats = ['video/mp4'];
-  // submit handler
-  const submitHandler = () => {
-    if (
-      !description ||
-      !movieTitle ||
-      !genre ||
-      !releasingYear ||
-      !grossRating ||
-      !maturityRating ||
-      !cast ||
-      !director ||
-      !writer
-    ) {
-      ErrorToaster(toast, 'Please fill all fields!');
-      return;
-    } else {
-      const payload = new FormData();
-      payload.append('user_id', loginData?.data?.user?._id);
-      payload.append('title', movieTitle);
-      payload.append('thumbnail', thumbnail);
-      payload.append('trailer', trailer);
-      payload.append('description', description);
-      payload.append('genre', genre);
-      payload.append('language', language);
-      payload.append('grossRatings', grossRating);
-      payload.append('cast', String(cast));
-      payload.append('maturityRating', maturityRating);
-      payload.append('releaseYear', releasingYear);
-      payload.append('duration', duration);
-      payload.append('writers', String(writer));
-      payload.append('director', String(director));
-      payload.append('video', movieVideo);
 
-      console.log(
-        payload.forEach((value, key) => {
-          console.log(key, value);
-        })
-      );
-      dispatch(addNewMovie(payload, toast));
-      // setcast('');
-      // setwriter('');
-      // setdirector('');
-      // setdescription('');
-      // setmovieTitle('');
-      // setduration('')
-      // setgenre('');
-      // setreleasingYear('');
-      // setGrossRating('');
-      // setmaturityRating('');
-      // setThumbnail('')
-      // setTrailer('')
-      // setlanguage('')
-      // setMovieVideo('')
-      
-    }
-  };
   useEffect(() => {
     const payload = { user_id: loginData?.data?.user?._id };
     dispatch(getAllCategories(payload, toast));
     dispatch(getAllLanguages(payload, toast));
   }, []);
+
+  const submitHandler = () => {
+    if (!writer || !director || !cast) {
+      ErrorToaster(toast, 'Please fill all details');
+    } else {
+      const payload = {
+        user_id: loginData?.data.user._id,
+        movie_id: data?._id,
+        title: movieTitle || data?.title,
+        description: description || data?.description,
+        genre: genre || data?.genre,
+        duration: data?.duration || duration,
+        releaseYear: data?.releaseYear || releasingYear,
+        language: language || data?.language,
+        grossRating: grossRating || data?.grossRating,
+        maturityRating: maturityRating || data?.maturityRating,
+        cast: String(cast) || data?.cast,
+        writers: String(writer) || data?.writers,
+        director: String(director) || data?.director,
+      };
+      dispatch(updateMovieInfo(payload, toast));
+      setcast();
+      setdirector();
+      setwriter()
+    }
+  };
   return (
     <>
-      <Button borderRadius={'md'} colorScheme={'teal'} onClick={onOpen}>
-        {' '}
-        Add Movie
+      <Button size={'sm'} colorScheme="cyan" onClick={onOpen}>
+        Edit Info
       </Button>
       <Modal isCentered size="full" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -174,7 +138,7 @@ const AddMovieModal = () => {
                 textAlign={'center'}
                 fontSize={{ base: 'xl', md: '2xl', lg: '3xl' }}
               >
-                Add New Movie
+                Edit Movie Info
               </Heading>
               <Stack
                 maxH={'70vh'}
@@ -183,12 +147,12 @@ const AddMovieModal = () => {
                 w={'100%'}
                 spacing={'6'}
               >
-                {/* title and description */}
-                <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}> 
-                  <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Movie Name</FormLabel>
+                {/* name and description */}
+                <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
+                  <FormControl w={{ base: '100%', md: '50%' }}>
+                    <FormLabel>Movie Title</FormLabel>
                     <Input
-                      value={movieTitle}
+                      defaultValue={data?.title}
                       onChange={e => setmovieTitle(e.target.value)}
                       size={'lg'}
                       _hover={{}}
@@ -198,10 +162,10 @@ const AddMovieModal = () => {
                       isRequired
                     />
                   </FormControl>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
+                  <FormControl w={{ base: '100%', md: '50%' }}>
                     <FormLabel>Movie Description</FormLabel>
                     <Input
-                      value={description}
+                      defaultValue={data?.description}
                       onChange={e => setdescription(e.target.value)}
                       size={'lg'}
                       _hover={{}}
@@ -212,51 +176,48 @@ const AddMovieModal = () => {
                     />
                   </FormControl>
                 </Stack>
-
-                {/* thumbnail and trailer  */}
+                {/* duration and releasing year */}
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Uplode Thumbnail</FormLabel>
+                  <FormControl w={{ base: '100%', md: '50%' }}>
+                    <FormLabel>Movie Duration</FormLabel>
                     <Input
-                      type={'file'}
+                      defaultValue={data?.duration}
+                      onChange={e => setduration(e.target.value)}
                       size={'lg'}
-                      p="1.5"
-                      onChange={e => setThumbnail(e.target.files[0])}
-                      accept={supportedThumbailFormats}
-                      borderColor="black"
+                      _hover={{}}
                       _focusVisible={{}}
-                      _hover={{ cursor: 'pointer' }}
+                      borderColor="black"
+                      placeholder="Movie duration"
                       isRequired
                     />
                   </FormControl>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Uplode Trailer</FormLabel>
+                  <FormControl w={{ base: '100%', md: '50%' }}>
+                    <FormLabel>Releasing Year</FormLabel>
                     <Input
-                      borderColor="black"
-                      _focusVisible={{}}
-                      _hover={{ cursor: 'pointer' }}
-                      type={'file'}
-                      p="1.5"
-                      onChange={e => setTrailer(e.target.files[0])}
-                      accept={supportedTrailerFormats}
+                      defaultValue={data?.releaseYear}
+                      onChange={e => setreleasingYear(e.target.value)}
                       size={'lg'}
+                      _hover={{}}
+                      _focusVisible={{}}
+                      borderColor="black"
+                      placeholder="Enter releasing year"
                       isRequired
                     />
                   </FormControl>
                 </Stack>
                 {/* gross rating and maturity rating */}
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
+                  <FormControl w={{ base: '100%', md: '50%' }}>
                     <FormLabel>Select Gross Rating</FormLabel>
                     <Select
                       isRequired
                       fontSize={{ base: 'md', md: 'lg' }}
-                      value={grossRating}
+                      defaultValue={data?.grossRating}
                       onChange={e => setGrossRating(e.target.value)}
                       _hover={{ cursor: 'pointer' }}
                       borderColor="black"
                       _focusVisible={{}}
-                      // placeholder="Choose Gross Rating"
+                      placeholder="Choose Gross Rating"
                       size="lg"
                     >
                       <option value="0star">0star</option>
@@ -267,17 +228,17 @@ const AddMovieModal = () => {
                       <option value="5stars">5stars</option>
                     </Select>
                   </FormControl>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
+                  <FormControl w={{ base: '100%', md: '50%' }}>
                     <FormLabel>Select Maturity Rating</FormLabel>
                     <Select
                       isRequired
                       fontSize={{ base: 'md', md: 'lg' }}
-                      value={maturityRating}
+                      defaultValue={data?.maturityRating}
                       onChange={e => setmaturityRating(e.target.value)}
                       _hover={{ cursor: 'pointer' }}
                       borderColor="black"
                       _focusVisible={{}}
-                      // placeholder="Choose Maturity Rating"
+                      placeholder="Choose Maturity Rating"
                       size="lg"
                     >
                       <option value="7+">7+</option>
@@ -315,7 +276,7 @@ const AddMovieModal = () => {
                   </FormControl>
                 </Stack>
                 {/* writer and director previews*/}
-                {writer?.length !== 0 || director?.length !== 0 ? (
+                {/* {writer?.length !== 0 || director?.length !== 0 ? (
                   <Stack
                     spacing={'8'}
                     direction={{ base: 'column', md: 'row' }}
@@ -401,75 +362,8 @@ const AddMovieModal = () => {
                       ))}
                     </SimpleGrid>
                   </Stack>
-                ) : null}
-                {/* total time and cast */}
-                <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Movie Duration</FormLabel>
-                    <Input
-                      size={'lg'}
-                      _hover={{}}
-                      value={duration}
-                      onChange={e => setduration(e.target.value)}
-                      type="text"
-                      _focusVisible={{}}
-                      borderColor="black"
-                      placeholder="Duration in minutes (e.g 30m)"
-                      isRequired
-                    />
-                  </FormControl>
-                  <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Movie Cast</FormLabel>
-                    <Input
-                      size={'lg'}
-                      _hover={{}}
-                      _focusVisible={{}}
-                      borderColor="black"
-                      placeholder="cast"
-                      onKeyDown={addCast}
-                      isRequired
-                    />
-                  </FormControl>
-                </Stack>
-                {/* cast names preview */}
-                {cast.length !== 0 ? (
-                  <SimpleGrid
-                    w={{ base: '100%', md: '50%' }}
-                    minChildWidth="120px"
-                    spacingX="10px"
-                    spacingY={'15px'}
-                    alignSelf="end"
-                  >
-                    {cast?.map((cast, index) => (
-                      <Stack w={'fit-content'} h="fitcontent" pos={'relative'}>
-                        {' '}
-                        <Tag
-                          key={index}
-                          h={'40px'}
-                          border="1px solid black"
-                          borderRadius="md"
-                          colorScheme={'blue'}
-                        >
-                          {cast} {''}
-                        </Tag>
-                        <Stack
-                          onClick={() => removeCast(cast)}
-                          _hover={{
-                            cursor: 'pointer',
-                            transform: 'scale(1.3)',
-                          }}
-                          transition="transform .2s"
-                          pos={'absolute'}
-                          top="-15px"
-                          right="-5px"
-                        >
-                          <ImCross fontSize={'0.8rem'} color="red" />
-                        </Stack>
-                      </Stack>
-                    ))}
-                  </SimpleGrid>
-                ) : null}
-                {/* select genre and languages */}
+                ) : null} */}
+                {/* genre and language*/}
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
                   <FormControl w={{ base: '100%', md: '48%' }}>
                     <FormLabel>Select Genre</FormLabel>
@@ -492,37 +386,61 @@ const AddMovieModal = () => {
                     ) : null}
                   </FormControl>
                 </Stack>
-                {/*releasing year and movie */}
+                {/*  cast */}
                 <Stack spacing={'8'} direction={{ base: 'column', md: 'row' }}>
                   <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Releasing Year</FormLabel>
+                    <FormLabel>Movie Cast</FormLabel>
                     <Input
-                      value={releasingYear}
-                      onChange={e => setreleasingYear(e.target.value)}
                       size={'lg'}
-                      type="number"
-                      _hover={{}}
-                      _focusVisible={{}}
-                      placeholder="Releasing year"
-                      borderColor="black"
-                      isRequired
-                    />
-                  </FormControl>
-
-                  <FormControl w={{ base: '100%', md: '48%' }}>
-                    <FormLabel>Uplode Movie</FormLabel>
-                    <Input
-                      onChange={e => setMovieVideo(e.target.files[0])}
-                      size={'lg'}
-                      p="1.5"
-                      type="file"
                       _hover={{}}
                       _focusVisible={{}}
                       borderColor="black"
+                      placeholder="cast"
+                      onKeyDown={addCast}
                       isRequired
                     />
                   </FormControl>
                 </Stack>
+                {/* cast names preview */}
+                {/* {cast?.length !== 0 ? (
+                    <SimpleGrid
+                      w={{ base: '100%', md: '50%' }}
+                      minChildWidth="120px"
+                      spacingX="10px"
+                      spacingY={'15px'}
+                      alignSelf="end"
+                    >
+                      {cast?.map((cast, index) => (
+                        <Stack w={'fit-content'} h="fitcontent" pos={'relative'}>
+                          {' '}
+                          <Tag
+                            key={index}
+                            h={'40px'}
+                            border="1px solid black"
+                            borderRadius="md"
+                            colorScheme={'blue'}
+                          >
+                            {cast} {''}
+                          </Tag>
+                          <Stack
+                            onClick={() => removeCast(cast)}
+                            _hover={{
+                              cursor: 'pointer',
+                              transform: 'scale(1.3)',
+                            }}
+                            transition="transform .2s"
+                            pos={'absolute'}
+                            top="-15px"
+                            right="-5px"
+                          >
+                            <ImCross fontSize={'0.8rem'} color="red" />
+                          </Stack>
+                        </Stack>
+                      ))}
+                    </SimpleGrid>
+                  ) : null} */}
+
+                {/* submit button */}
                 <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
                   <Button
                     borderRadius={'lg'}
@@ -532,7 +450,7 @@ const AddMovieModal = () => {
                     onClick={() => submitHandler()}
                   >
                     {' '}
-                    Upload Movie
+                    Edit Info
                   </Button>
                 </Stack>
               </Stack>
@@ -544,4 +462,4 @@ const AddMovieModal = () => {
   );
 };
 
-export default AddMovieModal;
+export default UpdateMovieInfoModal;

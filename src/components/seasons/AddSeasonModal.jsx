@@ -16,30 +16,29 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { addSeason } from '../../redux/actions/seasons/Season';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
-import { addSeason } from '../../redux/actions/seasons/Season'
 const AddSeasonModal = ({ seriesId }) => {
-  console.log("🚀 ~ file: AddSeasonModal.jsx ~ line 22 ~ AddSeasonModal ~ seriesId", seriesId)
   const toast = useToast()
   const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [seasonName, setSeasonName] = useState();
-  console.log("🚀 ~ file: AddSeasonModal.jsx ~ line 26 ~ AddSeasonModal ~ seasonName", seasonName)
 
   const addNewSeason = () => {
     const payload = {
       series_id: seriesId,
       seasonName: seasonName,
     }
-    console.log("🚀 ~ file: AddSeasonModal.jsx ~ line 34 ~ addSeason ~ payload", payload)
     if (!seasonName) {
       ErrorToaster(toast, 'Please enter season name')
     }
     dispatch(addSeason(payload, toast))
+    setSeasonName('')
+    onClose()
   }
   return (
     <>
-      <Button size={'sm'} colorScheme="facebook" onClick={onOpen}>
+      <Button size={'md'} colorScheme="facebook" onClick={onOpen}>
         Add Season
       </Button>
       <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>

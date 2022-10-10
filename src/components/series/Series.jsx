@@ -32,7 +32,7 @@ const Series = () => {
   const dispatch = useDispatch();
   const { allSeries, loading } = useSelector(state => state.Series);
   console.log("🚀 ~ file: Series.jsx ~ line 34 ~ Series ~ allSeries", allSeries)
-  console.log(allSeries);
+
   useEffect(() => {
     dispatch(getAllSeries(toast));
   }, []);
@@ -58,7 +58,7 @@ const Series = () => {
         <AddSeriesModal />
       </Stack>
 
-      {/* users detail table */}
+      {/* series detail table */}
       <TableContainer overflowX={'auto'} maxH='80vh' overflowY={'auto'} w={'100%'}>
         <Table w={'100%'} variant="striped" colorScheme="pink">
           <Thead>
@@ -127,7 +127,7 @@ const Series = () => {
                       size={'sm'}
                       colorScheme="red"
                     >
-                      Deactivate
+                      Change Status
                     </Button>
                   </Td>
                   <Td>

@@ -21,7 +21,6 @@ const Sidebar = () => {
       display={{base:'none',md:'inherit'}}
       overflow={'auto'}
       bg={'#1D1D1D'}
-      h="calc(100vh-60px)"
       maxH={"90vh"}
       mt="60px"
       minH="calc(100vh - 60px)"

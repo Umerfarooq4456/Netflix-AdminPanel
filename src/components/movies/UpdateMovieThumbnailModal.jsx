@@ -13,37 +13,37 @@ import {
   FormControl,
   FormLabel,
   useToast,
+  Image,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateSeriesTrailer } from '../../redux/actions/Series/Series';
+import { useNavigate } from 'react-router-dom';
+import { updateMovieThumbnail } from '../../redux/actions/movie/Movie';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
-const UpdateTrailerModal = ({data}) => {
-  const toast = useToast()
-  const dispatch =  useDispatch()
+const UpdateMovieThumbnailModal = ({ data }) => {
+  const nav = useNavigate()
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [trailer, setTrailer] = useState();
+  const [thumbnail, setThumbnail] = useState('');
   // supported image formats
-  const supportedTrailerFormats = ['video/mp4'];
-
-  const updateTrailerHandler = () => {
+  const supportedThumbailFormats = ['image/png', 'image/jpeg'];
+  const updateThumbnail = () => {
     const payload = new FormData();
-    payload.append('series_id', data?._id);
-    payload.append('trailer', trailer);
-    if (!trailer) {
+    payload.append('movie_id', data?._id);
+    payload.append('thumbnail', thumbnail);
+    if (!thumbnail) {
       ErrorToaster(toast, 'Please choose Thumbnail');
     } else {
-      console.log(
-        '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 46 ~ updateThumbnail ~ payload',
-        payload.get('thumbnail')
-      );
-      dispatch(updateSeriesTrailer(payload, toast));
+      dispatch(updateMovieThumbnail(payload, toast,nav));
+      setThumbnail('');
+      onClose();
     }
   };
   return (
     <>
-      <Button colorScheme="facebook" size={'sm'} onClick={onOpen}>
-        Update Trailer
+      <Button size={'sm'} colorScheme="facebook" onClick={onOpen}>
+        Update Thumbnail
       </Button>
       <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -58,20 +58,22 @@ const UpdateTrailerModal = ({data}) => {
                 textAlign={'center'}
                 fontSize={{ base: 'xl', md: '2xl' }}
               >
-                Update Series Trailer
+                Update Movie Thumbnail
               </Heading>
+              <Image alignSelf={'center'} rounded={'md'} w='400px' h='300px' src={data?.thumbnail}/>
               <Stack px={{ base: '2', md: '4' }} w={'100%'}>
                 <FormControl>
-                  <FormLabel color={'black'}>Upload Trailer</FormLabel>
+                  <FormLabel color={'black'}>Upload Thumbnail</FormLabel>
                   <Input
-                    accept={supportedTrailerFormats}
-                    rounded={'md'}
-                    _hover={{ cursor: 'pointer' }}
-                    p="1.5"
-                    border={'1px solid black !important'}
+                    type={'file'}
                     size={'lg'}
-                    onChange={(e)=>setTrailer(e.target.files[0])}
-                    type="file"
+                    onChange={e => setThumbnail(e.target.files[0])}
+                    accept={supportedThumbailFormats}
+                    p="1.5"
+                    borderColor="black"
+                    _focusVisible={{}}
+                    _hover={{ cursor: 'pointer' }}
+                    isRequired
                   />
                 </FormControl>
                 <Stack pt={{ base: '4', md: '8' }} alignItems={'center'}>
@@ -79,7 +81,7 @@ const UpdateTrailerModal = ({data}) => {
                     borderRadius={'lg'}
                     size={'lg'}
                     colorScheme={'red'}
-                    onClick={() => updateTrailerHandler()}
+                    onClick={() => updateThumbnail()}
                   >
                     {' '}
                     Update
@@ -94,4 +96,4 @@ const UpdateTrailerModal = ({data}) => {
   );
 };
 
-export default UpdateTrailerModal;
+export default UpdateMovieThumbnailModal;

@@ -31,22 +31,18 @@ const UpdateThumbnailModal = ({ data }) => {
   // supported image formats
   const supportedThumbailFormats = ['image/png', 'image/jpeg'];
   const updateThumbnail = () => {
-    const payload = {
-      series_id: data?._id,
-      thumbnail: thumbnail,
-    };
-    console.log(
-      '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 34 ~ updateThumbnail ~ payload',
-      payload
-    );
+    const payload = new FormData();
+    payload.append('series_id', data?._id);
+    payload.append('thumbnail', thumbnail);
     if (!thumbnail) {
       ErrorToaster(toast, 'Please choose Thumbnail');
     } else {
       console.log(
         '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 46 ~ updateThumbnail ~ payload',
-        payload
+        payload.get('thumbnail')
       );
       dispatch(updateSeriesThumbnail(payload, toast));
+      onClose()
     }
   };
   return (
@@ -70,12 +66,13 @@ const UpdateThumbnailModal = ({ data }) => {
                 Update Series Thumbnail
               </Heading>
               <Stack px={{ base: '2', md: '4' }} w={'100%'}>
-                <Image src={data?.thumbnail} w='32'/>
+                <Image src={data?.thumbnail} alignSelf='center' rounded={'md'} h='300px' w='400px' />
                 <FormControl>
                   <FormLabel color={'black'}>Upload Thumbnail</FormLabel>
                   <Input
                     type={'file'}
-                    size={'md'}
+                    size={'lg'}
+                    p='1.5'
                     onChange={e => setThumbnail(e.target.files[0])}
                     accept={supportedThumbailFormats}
                     borderColor="black"

@@ -57,10 +57,6 @@ export const getAllSeries = toast => async dispatch => {
 };
 
 export const updateSeriesThumbnail = (data, toast) => async dispatch => {
-  console.log(
-    '🚀 ~ file: Series.js ~ line 44 ~ updateSeriesThumbnail ~ data',
-    data
-  );
   try {
     dispatch({ type: UPDATE_SERIES_THUMBNAIL_LOADING });
     const res = await updateSeriesThumbnailServices(data);
@@ -74,11 +70,6 @@ export const updateSeriesThumbnail = (data, toast) => async dispatch => {
 };
 
 export const updateSeriesTrailer = (data, toast) => async dispatch => {
-  console.log(
-    '🚀 ~ file: Series.js ~ line 63 ~ updateSeriesTrailer ~ data',
-    data
-  );
-
   try {
     dispatch({ type: UPDATE_SERIES_TRAILER_LOADING });
     const res = await updateSeriesTrailerServices(data);
@@ -94,11 +85,9 @@ export const updateSeriesTrailer = (data, toast) => async dispatch => {
 export const deactiveSeries = (payload, toast) => async dispatch => {
   try {
     dispatch({ type: DEACTIVE_SERIES_LOADING });
-    const { data } = await deactiveSeriesServices(payload);
-    dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: { data, payload } });
-    SuccessToaster(toast, data?.message);
     const res = await deactiveSeriesServices(payload);
-    dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: { res, payload } });
+    const {data} = res
+    dispatch({ type: DEACTIVE_SERIES_SUCCESS, payload: data });
     SuccessToaster(toast, res?.data?.message);
   } catch (error) {
     ErrorToaster(toast, error?.response?.data?.message || error?.message);

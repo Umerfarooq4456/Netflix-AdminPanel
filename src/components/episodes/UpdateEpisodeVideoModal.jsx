@@ -16,34 +16,32 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateSeriesTrailer } from '../../redux/actions/Series/Series';
+import { updateEpisodeVideo } from '../../redux/actions/episode/episode';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
-const UpdateTrailerModal = ({data}) => {
-  const toast = useToast()
-  const dispatch =  useDispatch()
+const UpdateEpisodeVideoModal = ({ id }) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [trailer, setTrailer] = useState();
+  const [video, setVideo] = useState();
   // supported image formats
   const supportedTrailerFormats = ['video/mp4'];
 
-  const updateTrailerHandler = () => {
+  const updateVideoHandler = () => {
     const payload = new FormData();
-    payload.append('series_id', data?._id);
-    payload.append('trailer', trailer);
-    if (!trailer) {
-      ErrorToaster(toast, 'Please choose Thumbnail');
+    payload.append('episode_id', id);
+    payload.append('video', video);
+    if (!video) {
+      ErrorToaster(toast, 'Please choose Video');
     } else {
-      console.log(
-        '🚀 ~ file: UpdateThumbnailModal.jsx ~ line 46 ~ updateThumbnail ~ payload',
-        payload.get('thumbnail')
-      );
-      dispatch(updateSeriesTrailer(payload, toast));
+      dispatch(updateEpisodeVideo(payload, toast));
+      setVideo('');
+      onClose();
     }
   };
   return (
     <>
       <Button colorScheme="facebook" size={'sm'} onClick={onOpen}>
-        Update Trailer
+        Update Video
       </Button>
       <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -58,11 +56,11 @@ const UpdateTrailerModal = ({data}) => {
                 textAlign={'center'}
                 fontSize={{ base: 'xl', md: '2xl' }}
               >
-                Update Series Trailer
+                Update Episode Video
               </Heading>
               <Stack px={{ base: '2', md: '4' }} w={'100%'}>
                 <FormControl>
-                  <FormLabel color={'black'}>Upload Trailer</FormLabel>
+                  <FormLabel color={'black'}>Upload Video</FormLabel>
                   <Input
                     accept={supportedTrailerFormats}
                     rounded={'md'}
@@ -70,7 +68,7 @@ const UpdateTrailerModal = ({data}) => {
                     p="1.5"
                     border={'1px solid black !important'}
                     size={'lg'}
-                    onChange={(e)=>setTrailer(e.target.files[0])}
+                    onChange={e => setVideo(e.target.files[0])}
                     type="file"
                   />
                 </FormControl>
@@ -79,7 +77,7 @@ const UpdateTrailerModal = ({data}) => {
                     borderRadius={'lg'}
                     size={'lg'}
                     colorScheme={'red'}
-                    onClick={() => updateTrailerHandler()}
+                    onClick={() => updateVideoHandler()}
                   >
                     {' '}
                     Update
@@ -94,4 +92,4 @@ const UpdateTrailerModal = ({data}) => {
   );
 };
 
-export default UpdateTrailerModal;
+export default UpdateEpisodeVideoModal;
