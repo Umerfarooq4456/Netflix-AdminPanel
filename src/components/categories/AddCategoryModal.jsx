@@ -23,7 +23,6 @@ const AddCategoryModal = () => {
 
   const toast = useToast();
   const dispatch = useDispatch();
-
   const [title, setTitle] = useState();
   const [isActive, setIsActive] = useState(true);
   const { loginData } = useSelector(state => state.Auth);

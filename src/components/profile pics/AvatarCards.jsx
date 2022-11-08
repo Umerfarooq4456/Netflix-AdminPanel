@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addProfileAvatar } from '../../redux/actions/profileavatar/ProfileAvatar';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
 
-const AvatarCards = ({ filesData,avatarTitle,setavatarTitle}) => {
+const AvatarCards = ({ filesData,avatarTitle}) => {
   const toast = useToast()
   const dispatch =  useDispatch()
   const images = useMemo(() => filesData);

@@ -8,12 +8,11 @@ import {
   Td,
   TableContainer,
   Stack,
-  Button,
   Heading,
   Select,
 } from '@chakra-ui/react';
-
 import { useNavigate } from 'react-router-dom';
+
 const UserDetails = () => {
     const [status, setStatus] = useState()
   const nav = useNavigate();

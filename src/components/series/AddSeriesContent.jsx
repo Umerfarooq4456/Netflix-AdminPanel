@@ -9,11 +9,12 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ImCross } from 'react-icons/im';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createSeries } from '../../redux/actions/Series/Series';
 import { useSelector, useDispatch } from 'react-redux';
 import ErrorToaster from '../../utils/toaster/ErrorToaster';
 import MultiSelectDropdown from '../multiselect/MultiSelect';
+
 export const AddSeriesContent = () => {
   const toast = useToast();
   const dispatch = useDispatch();
